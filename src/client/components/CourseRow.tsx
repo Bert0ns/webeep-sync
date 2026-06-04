@@ -22,7 +22,6 @@ export const CourseRow: FC<{
     if (input.value.length < 1) input.setCustomValidity(t("tooShort"))
     else if (input.value.length >= 255) input.setCustomValidity(t("tooLong"))
     else if (!/^[^:*?"<>|]*$/.test(input.value))
-      // eslint-disable-next-line quotes
       input.setCustomValidity(t("invalidCharacters") + ':*?"<>|')
     else input.setCustomValidity("")
   }

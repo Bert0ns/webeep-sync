@@ -10,6 +10,7 @@ import { Link } from "../components/Link"
 import PolinetworkLogo from "../assets/polinetwork.svg"
 import { Switch } from "../components/Switch"
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const themes = ["light", "dark", "system"] as const
 type Theme = (typeof themes)[number]
 

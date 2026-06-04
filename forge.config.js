@@ -147,7 +147,6 @@ module.exports = {
               name: "main_window",
               html: "./src/index.html",
               js: "./src/renderer.ts",
-              name: "main_window",
             },
           ],
         },
@@ -158,7 +157,7 @@ module.exports = {
     postMake: (_config, makeResults) => {
       // this hook is here to zip the .exe installer, because windows doesnt trust when you
       // download an unsigned .exe from the internet, but it's ok if you unzip it first
-      let winRelease = makeResults.find(m => m.platform === "win32")
+      const winRelease = makeResults.find(m => m.platform === "win32")
       if (winRelease) {
         let zipPath // will be set to the .zip file, will be used for new artifact array
         console.log("Zipping exe installer...")

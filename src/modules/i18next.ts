@@ -1,8 +1,9 @@
 import path from "path"
 import i18n from "i18next"
-import I18Backend from "i18next-fs-backend"
 
 import { __static } from "../util"
+
+declare const __non_webpack_require__: any
 
 let initializing = false
 let initialized = false
@@ -17,7 +18,10 @@ export function i18nInit(): Promise<void> {
     if (initializing) i18n.on("loaded", () => resolve())
     else {
       initializing = true
-      await i18n.use(I18Backend).init({
+      // Bypass webpack completely for this module
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const backend = (typeof __non_webpack_require__ !== "undefined" ? __non_webpack_require__ : require)("i18next-fs-backend")
+      await i18n.use(backend).init({
         ns: ["common", "tray", "client", "notifications"],
         defaultNS: "common",
         fallbackLng: "en",

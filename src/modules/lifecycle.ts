@@ -11,7 +11,7 @@ export const windowsLoginSettings = {
     "--processStart",
     `"${path.basename(process.execPath)}"`,
     "--process-start-args",
-    // eslint-disable-next-line quotes
+
     '"--hidden --tray-only"',
   ],
 }
