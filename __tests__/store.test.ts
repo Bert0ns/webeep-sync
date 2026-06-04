@@ -34,7 +34,7 @@ jest.mock("lowdb/node", () => ({
   JSONFile: class MockJSONFile {},
 }))
 
-import { storeIsReady, store } from "../modules/store"
+import { storeIsReady, store } from "../src/modules/store"
 
 describe("Store", () => {
   it("initializes store and populates default settings", async () => {

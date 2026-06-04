@@ -1,4 +1,4 @@
-import { formatSize, breakableString, sanitizePath, generateUID } from "../util"
+import { formatSize, breakableString, sanitizePath, generateUID } from "../src/util"
 
 describe("util module", () => {
   describe("formatSize", () => {

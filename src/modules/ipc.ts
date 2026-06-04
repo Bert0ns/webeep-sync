@@ -173,6 +173,11 @@ export function setupIpc() {
     await store.write()
   })
 
+  ipcMain.on("set-preview-language", async (e, lang: string) => {
+    debug(`preview language changed to: ${lang}`)
+    await i18n.changeLanguage(lang)
+  })
+
   ipcMain.handle("rename-course", async (e, id: number, newName: string) => {
     let success = true
     try {

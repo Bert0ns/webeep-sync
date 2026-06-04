@@ -14,7 +14,7 @@ jest.mock("fs/promises", () => ({
   },
 }))
 
-import { createLogger } from "../modules/logger"
+import { createLogger } from "../src/modules/logger"
 
 describe("Logger", () => {
   it("creates a logger with expected methods", () => {
