@@ -12,19 +12,21 @@ import { Course } from "../src/modules/moodle"
 jest.mock("electron", () => ({
   ipcRenderer: {
     send: jest.fn(),
-  }
+  },
 }))
 
 // Mock react-i18next
 jest.mock("react-i18next", () => ({
   useTranslation: () => ({
     t: (key: string) => key,
-  })
+  }),
 }))
 
 // Mock components
 jest.mock("../src/client/components/CourseRow", () => ({
-  CourseRow: ({ course }: any) => <div data-testid={`course-${course.id}`}>{course.name}</div>
+  CourseRow: ({ course }: any) => (
+    <div data-testid={`course-${course.id}`}>{course.name}</div>
+  ),
 }))
 
 describe("CourseList", () => {
@@ -35,7 +37,7 @@ describe("CourseList", () => {
   it("should show selectAll when not all courses are synced", () => {
     const courses = [
       { id: 1, name: "Course 1", fullname: "Course 1", shouldSync: true },
-      { id: 2, name: "Course 2", fullname: "Course 2", shouldSync: false }
+      { id: 2, name: "Course 2", fullname: "Course 2", shouldSync: false },
     ] as Course[]
 
     render(<CourseList courses={courses} />)
@@ -51,7 +53,7 @@ describe("CourseList", () => {
   it("should show deselectAll when all courses are synced", () => {
     const courses = [
       { id: 1, name: "Course 1", fullname: "Course 1", shouldSync: true },
-      { id: 2, name: "Course 2", fullname: "Course 2", shouldSync: true }
+      { id: 2, name: "Course 2", fullname: "Course 2", shouldSync: true },
     ] as Course[]
 
     render(<CourseList courses={courses} />)

@@ -12,32 +12,34 @@ jest.mock("electron", () => ({
   ipcRenderer: {
     invoke: jest.fn(),
     send: jest.fn(),
-  }
+  },
 }))
 
 // Mock react-i18next
 jest.mock("react-i18next", () => ({
   useTranslation: () => ({
     t: (key: string) => key,
-  })
+  }),
 }))
 
 // Mock components
 jest.mock("../src/client/components/Modal", () => ({
   Modal: ({ children, onClose }: any) => (
     <div data-testid="modal">
-      <button data-testid="modal-close" onClick={onClose}>Close</button>
+      <button data-testid="modal-close" onClick={onClose}>
+        Close
+      </button>
       {children}
     </div>
-  )
+  ),
 }))
 
 jest.mock("../src/client/components/Switch", () => ({
-  Switch: () => <div data-testid="switch" />
+  Switch: () => <div data-testid="switch" />,
 }))
 
 jest.mock("../src/client/components/Link", () => ({
-  Link: ({ children }: any) => <a>{children}</a>
+  Link: ({ children }: any) => <a>{children}</a>,
 }))
 
 jest.mock("../src/client/assets/polinetwork.svg", () => {
@@ -49,7 +51,7 @@ jest.mock("../src/client/assets/polinetwork.svg", () => {
 describe("SettingsModal", () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(ipcRenderer.invoke as jest.Mock).mockImplementation((channel) => {
+    ;(ipcRenderer.invoke as jest.Mock).mockImplementation(channel => {
       if (channel === "settings") {
         return Promise.resolve({
           language: "en",
@@ -58,7 +60,7 @@ describe("SettingsModal", () => {
           notificationOnNewFiles: true,
           notificationOnMessage: true,
           syncNewCourses: true,
-          maxConcurrentDownloads: 5
+          maxConcurrentDownloads: 5,
         })
       }
       if (channel === "get-native-theme") return Promise.resolve("system")
@@ -95,7 +97,7 @@ describe("SettingsModal", () => {
     render(<SettingsModal onClose={onClose} />)
 
     const select = await screen.findByDisplayValue("English")
-    
+
     // Change language
     fireEvent.change(select, { target: { value: "it" } })
     ;(ipcRenderer.send as jest.Mock).mockClear()

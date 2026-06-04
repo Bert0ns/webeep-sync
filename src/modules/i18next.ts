@@ -20,7 +20,11 @@ export function i18nInit(): Promise<void> {
       initializing = true
       // Bypass webpack completely for this module
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const backend = (typeof __non_webpack_require__ !== "undefined" ? __non_webpack_require__ : require)("i18next-fs-backend")
+      const backend = (
+        typeof __non_webpack_require__ !== "undefined"
+          ? __non_webpack_require__
+          : require
+      )("i18next-fs-backend")
       await i18n.use(backend).init({
         ns: ["common", "tray", "client", "notifications"],
         defaultNS: "common",

@@ -10,25 +10,35 @@ import { shell } from "electron"
 jest.mock("electron", () => ({
   shell: {
     showItemInFolder: jest.fn(),
-    openPath: jest.fn()
-  }
+    openPath: jest.fn(),
+  },
 }))
 
 jest.mock("react-i18next", () => ({
   useTranslation: () => ({
     t: (key: string) => key,
-  })
+  }),
 }))
 
 jest.mock("../src/util", () => ({
   formatSize: (size: number) => `SIZE_${size}`,
-  breakableString: (str: string) => str
+  breakableString: (str: string) => str,
 }))
 
 describe("NewFilesCourseCollapsable", () => {
   const mockFiles = [
-    { filename: "file1.pdf", absolutePath: "/path/to/file1.pdf", filesize: 1024, updated: false },
-    { filename: "file2.doc", absolutePath: "/path/to/file2.doc", filesize: 2048, updated: true },
+    {
+      filename: "file1.pdf",
+      absolutePath: "/path/to/file1.pdf",
+      filesize: 1024,
+      updated: false,
+    },
+    {
+      filename: "file2.doc",
+      absolutePath: "/path/to/file2.doc",
+      filesize: 2048,
+      updated: true,
+    },
   ]
 
   beforeEach(() => {
@@ -36,8 +46,10 @@ describe("NewFilesCourseCollapsable", () => {
   })
 
   it("renders open by default with file list", () => {
-    render(<NewFilesCourseCollapsable name="Math 101" files={mockFiles as any} />)
-    
+    render(
+      <NewFilesCourseCollapsable name="Math 101" files={mockFiles as any} />,
+    )
+
     expect(screen.getByText("Math 101 (2)")).toBeInTheDocument()
     expect(screen.getByText("file1.pdf")).toBeInTheDocument()
     expect(screen.getByText("file2.doc")).toBeInTheDocument()
@@ -46,8 +58,10 @@ describe("NewFilesCourseCollapsable", () => {
   })
 
   it("toggles file list on click", () => {
-    render(<NewFilesCourseCollapsable name="Math 101" files={mockFiles as any} />)
-    
+    render(
+      <NewFilesCourseCollapsable name="Math 101" files={mockFiles as any} />,
+    )
+
     // Initially files are shown
     expect(screen.getByText("file1.pdf")).toBeInTheDocument()
 
@@ -64,8 +78,13 @@ describe("NewFilesCourseCollapsable", () => {
   })
 
   it("opens file and reveals in folder", () => {
-    render(<NewFilesCourseCollapsable name="Math 101" files={[mockFiles[0]] as any} />)
-    
+    render(
+      <NewFilesCourseCollapsable
+        name="Math 101"
+        files={[mockFiles[0]] as any}
+      />,
+    )
+
     const revealBtn = screen.getByText("reveal")
     fireEvent.click(revealBtn)
     expect(shell.showItemInFolder).toHaveBeenCalledWith("/path/to/file1.pdf")

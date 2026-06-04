@@ -11,7 +11,7 @@ jest.mock("react-icons/io5", () => ({
     <button data-testid="close-btn" className={className} onClick={onClick}>
       Close
     </button>
-  )
+  ),
 }))
 
 describe("Modal", () => {
@@ -20,7 +20,7 @@ describe("Modal", () => {
     render(
       <Modal title="My Modal" onClose={onClose}>
         <div data-testid="child-content">Content</div>
-      </Modal>
+      </Modal>,
     )
 
     expect(screen.getByText("My Modal")).toBeInTheDocument()
@@ -30,7 +30,9 @@ describe("Modal", () => {
   it("calls onClose when the close icon is clicked", () => {
     const onClose = jest.fn()
     render(
-      <Modal title="Test" onClose={onClose}>Content</Modal>
+      <Modal title="Test" onClose={onClose}>
+        Content
+      </Modal>,
     )
 
     fireEvent.click(screen.getByTestId("close-btn"))
@@ -40,7 +42,9 @@ describe("Modal", () => {
   it("calls onClose when pressing Escape", () => {
     const onClose = jest.fn()
     const { container } = render(
-      <Modal title="Test" onClose={onClose}>Content</Modal>
+      <Modal title="Test" onClose={onClose}>
+        Content
+      </Modal>,
     )
 
     fireEvent.keyDown(container.firstChild as HTMLElement, { key: "Escape" })
@@ -50,7 +54,9 @@ describe("Modal", () => {
   it("calls onClose when clicking outside the modal content", () => {
     const onClose = jest.fn()
     const { container } = render(
-      <Modal title="Test" onClose={onClose}>Content</Modal>
+      <Modal title="Test" onClose={onClose}>
+        Content
+      </Modal>,
     )
 
     fireEvent.click(container.firstChild as HTMLElement) // Click the container
@@ -62,7 +68,7 @@ describe("Modal", () => {
     render(
       <Modal title="Test" onClose={onClose}>
         <div data-testid="inner">Inner</div>
-      </Modal>
+      </Modal>,
     )
 
     fireEvent.click(screen.getByTestId("inner"))
@@ -73,7 +79,7 @@ describe("Modal", () => {
     const { container } = render(
       <Modal onClose={() => {}} title="Test Modal">
         <div>Modal content</div>
-      </Modal>
+      </Modal>,
     )
 
     const headerDiv = container.querySelector(".modal-header")
@@ -81,27 +87,36 @@ describe("Modal", () => {
 
     expect(headerDiv.className).not.toContain("shadow")
 
-    const originalScrollTop = Object.getOwnPropertyDescriptor(Element.prototype, 'scrollTop');
+    const originalScrollTop = Object.getOwnPropertyDescriptor(
+      Element.prototype,
+      "scrollTop",
+    )
 
     // Scroll down
     act(() => {
-      Object.defineProperty(Element.prototype, 'scrollTop', { configurable: true, value: 10 })
+      Object.defineProperty(Element.prototype, "scrollTop", {
+        configurable: true,
+        value: 10,
+      })
       fireEvent.scroll(contentDiv)
     })
     expect(headerDiv.className).toContain("shadow")
 
     // Scroll up
     act(() => {
-      Object.defineProperty(Element.prototype, 'scrollTop', { configurable: true, value: 0 })
+      Object.defineProperty(Element.prototype, "scrollTop", {
+        configurable: true,
+        value: 0,
+      })
       fireEvent.scroll(contentDiv)
     })
     expect(headerDiv.className).not.toContain("shadow")
 
     if (originalScrollTop) {
-      Object.defineProperty(Element.prototype, 'scrollTop', originalScrollTop)
+      Object.defineProperty(Element.prototype, "scrollTop", originalScrollTop)
     } else {
       // In some jsdom versions it might not exist, though it should
-      delete (Element.prototype as any).scrollTop;
+      delete (Element.prototype as any).scrollTop
     }
   })
 })

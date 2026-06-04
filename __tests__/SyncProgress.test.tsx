@@ -20,27 +20,33 @@ jest.mock("electron", () => {
       trigger: (channel: string, ...args: any[]) => {
         if (listeners[channel]) listeners[channel]({} as any, ...args)
       },
-      clear: () => { listeners = {} }
-    }
+      clear: () => {
+        listeners = {}
+      },
+    },
   }
 })
 
 jest.mock("react-i18next", () => ({
   useTranslation: () => ({
     t: (key: string, args?: any) => `${key} ${args?.count ?? ""}`.trim(),
-  })
+  }),
 }))
 
 jest.mock("../src/client/views/NewFilesModal", () => ({
   NewFilesModal: ({ onClose }: any) => (
     <div data-testid="new-files-modal">
-      <button data-testid="modal-close" onClick={onClose}>Close</button>
+      <button data-testid="modal-close" onClick={onClose}>
+        Close
+      </button>
     </div>
-  )
+  ),
 }))
 
 jest.mock("../src/client/components/SyncProgressWrap", () => ({
-  SyncProgressWrap: ({ progress }: any) => <div data-testid="sync-progress-wrap">{progress.downloaded}</div>
+  SyncProgressWrap: ({ progress }: any) => (
+    <div data-testid="sync-progress-wrap">{progress.downloaded}</div>
+  ),
 }))
 
 describe("SyncProgress", () => {
@@ -53,20 +59,22 @@ describe("SyncProgress", () => {
     return render(
       <LoginContext.Provider value={{ connected, isLogged } as any}>
         <SyncProgress />
-      </LoginContext.Provider>
+      </LoginContext.Provider>,
     )
   }
 
   it("renders idle and fetching previously synced items", async () => {
     ;(ipcRenderer.invoke as jest.Mock).mockResolvedValueOnce({
-      "Course 1": [{ filename: "file.pdf" }]
+      "Course 1": [{ filename: "file.pdf" }],
     })
 
     await act(async () => {
       renderWithContext(true, true)
     })
 
-    expect(ipcRenderer.invoke).toHaveBeenCalledWith("get-previously-synced-items")
+    expect(ipcRenderer.invoke).toHaveBeenCalledWith(
+      "get-previously-synced-items",
+    )
     expect(screen.getByText("prevNewFiles 1")).toBeInTheDocument()
 
     // Test View Files button
@@ -100,7 +108,7 @@ describe("SyncProgress", () => {
     act(() => {
       ;(ipcRenderer as any).trigger("sync-result", SyncResult.success)
       ;(ipcRenderer as any).trigger("new-files", {
-        "Course 1": [{ filename: "file.pdf" }]
+        "Course 1": [{ filename: "file.pdf" }],
       })
     })
 
@@ -141,7 +149,10 @@ describe("SyncProgress", () => {
     })
 
     act(() => {
-      ;(ipcRenderer as any).trigger("download-state", DownloadState.fetchingFiles)
+      ;(ipcRenderer as any).trigger(
+        "download-state",
+        DownloadState.fetchingFiles,
+      )
     })
 
     expect(screen.getByText("statusMessage.fetchingFiles")).toBeInTheDocument()

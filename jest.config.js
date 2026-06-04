@@ -5,8 +5,5 @@ module.exports = {
   testMatch: ["**/*.test.ts", "**/*.test.tsx"],
   collectCoverage: true,
   coverageDirectory: "coverage",
-  collectCoverageFrom: [
-    "src/**/*.{ts,tsx}",
-    "!src/**/*.d.ts"
-  ]
+  collectCoverageFrom: ["src/**/*.{ts,tsx}", "!src/**/*.d.ts"],
 }

@@ -8,8 +8,12 @@ import { Checkbox } from "../src/client/components/Checkbox"
 
 // Mock the icons
 jest.mock("react-icons/io5", () => ({
-  IoCheckbox: ({ onClick, className }: any) => <svg data-testid="positive-icon" onClick={onClick} className={className} />,
-  IoSquareOutline: ({ onClick, color }: any) => <svg data-testid="negative-icon" onClick={onClick} style={{ color }} />
+  IoCheckbox: ({ onClick, className }: any) => (
+    <svg data-testid="positive-icon" onClick={onClick} className={className} />
+  ),
+  IoSquareOutline: ({ onClick, color }: any) => (
+    <svg data-testid="negative-icon" onClick={onClick} style={{ color }} />
+  ),
 }))
 
 describe("Checkbox", () => {
@@ -46,10 +50,22 @@ describe("Checkbox", () => {
     const CustomPositive = () => <div data-testid="custom-positive" />
     const CustomNegative = () => <div data-testid="custom-negative" />
 
-    const { rerender } = render(<Checkbox value={true} onChange={jest.fn()} PositiveIcon={CustomPositive} />)
+    const { rerender } = render(
+      <Checkbox
+        value={true}
+        onChange={jest.fn()}
+        PositiveIcon={CustomPositive}
+      />,
+    )
     expect(screen.getByTestId("custom-positive")).toBeInTheDocument()
 
-    rerender(<Checkbox value={false} onChange={jest.fn()} NegativeIcon={CustomNegative} />)
+    rerender(
+      <Checkbox
+        value={false}
+        onChange={jest.fn()}
+        NegativeIcon={CustomNegative}
+      />,
+    )
     expect(screen.getByTestId("custom-negative")).toBeInTheDocument()
   })
 })

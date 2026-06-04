@@ -430,11 +430,26 @@ $modal-anim-time: 0.15s;
         right: 0;
 
         z-index: 15;
-        max-height: 300px;
+        height: 300px;
+        max-height: 80vh;
         width: 260px;
+        min-width: 260px;
+        min-height: 200px;
+        max-width: 600px;
         overflow-x: hidden;
         overflow-y: auto;
+        resize: both;
         box-sizing: border-box;
+
+        &::-webkit-resizer {
+          background-color: transparent;
+          border-bottom: 2px solid #888;
+          border-right: 2px solid #888;
+          box-shadow:
+            inset -2px -2px 0 0 $almost-white,
+            inset -4px -4px 0 0 #888;
+          outline: 2px solid $almost-white;
+        }
 
         border-radius: 8px;
         background-color: $almost-white;

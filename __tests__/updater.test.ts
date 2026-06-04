@@ -1,4 +1,8 @@
-import { setupUpdater, checkForUpdates, isUpdateAvailable } from "../src/modules/updater"
+import {
+  setupUpdater,
+  checkForUpdates,
+  isUpdateAvailable,
+} from "../src/modules/updater"
 import { app, autoUpdater, ipcMain } from "electron"
 import { storeIsReady, store } from "../src/modules/store"
 
@@ -18,7 +22,7 @@ jest.mock("electron", () => {
       quitAndInstall: jest.fn(),
       trigger: (event: string, ...args: any[]) => {
         if (listeners[event]) listeners[event](...args)
-      }
+      },
     },
     ipcMain: {
       handle: jest.fn((channel, cb) => {
@@ -26,8 +30,8 @@ jest.mock("electron", () => {
       }),
       trigger: (channel: string, ...args: any[]) => {
         if (ipcListeners[channel]) ipcListeners[channel](...args)
-      }
-    }
+      },
+    },
   }
 })
 
@@ -35,8 +39,8 @@ jest.mock("../src/modules/logger", () => ({
   createLogger: () => ({
     log: jest.fn(),
     debug: jest.fn(),
-    error: jest.fn()
-  })
+    error: jest.fn(),
+  }),
 }))
 
 jest.mock("../src/modules/store", () => ({
@@ -44,14 +48,14 @@ jest.mock("../src/modules/store", () => ({
   store: {
     data: {
       settings: {
-        automaticUpdates: true
-      }
-    }
-  }
+        automaticUpdates: true,
+      },
+    },
+  },
 }))
 
 jest.mock("../src/modules/window", () => ({
-  send: jest.fn()
+  send: jest.fn(),
 }))
 
 describe("updater module", () => {
@@ -77,25 +81,39 @@ describe("updater module", () => {
     setupUpdater()
 
     expect(autoUpdater.setFeedURL).toHaveBeenCalledWith({
-      url: `https://update.electronjs.org/toto04/webeep-sync/${platform}-${arch}/1.0.0`
+      url: `https://update.electronjs.org/toto04/webeep-sync/${platform}-${arch}/1.0.0`,
     })
 
     expect(autoUpdater.on).toHaveBeenCalledWith("error", expect.any(Function))
-    expect(autoUpdater.on).toHaveBeenCalledWith("checking-for-update", expect.any(Function))
-    expect(autoUpdater.on).toHaveBeenCalledWith("update-not-available", expect.any(Function))
-    expect(autoUpdater.on).toHaveBeenCalledWith("update-available", expect.any(Function))
-    expect(autoUpdater.on).toHaveBeenCalledWith("update-downloaded", expect.any(Function))
-    expect(ipcMain.handle).toHaveBeenCalledWith("quit-and-install", expect.any(Function))
+    expect(autoUpdater.on).toHaveBeenCalledWith(
+      "checking-for-update",
+      expect.any(Function),
+    )
+    expect(autoUpdater.on).toHaveBeenCalledWith(
+      "update-not-available",
+      expect.any(Function),
+    )
+    expect(autoUpdater.on).toHaveBeenCalledWith(
+      "update-available",
+      expect.any(Function),
+    )
+    expect(autoUpdater.on).toHaveBeenCalledWith(
+      "update-downloaded",
+      expect.any(Function),
+    )
+    expect(ipcMain.handle).toHaveBeenCalledWith(
+      "quit-and-install",
+      expect.any(Function),
+    )
   })
 
   it("handles update-downloaded event", () => {
     setupUpdater()
     expect(isUpdateAvailable()).toBe(false)
-    
     ;(autoUpdater as any).trigger("update-downloaded")
-    
+
     expect(isUpdateAvailable()).toBe(true)
-    
+
     const { send } = require("../src/modules/window")
     expect(send).toHaveBeenCalledWith("update-available")
   })
@@ -108,16 +126,16 @@ describe("updater module", () => {
 
   it("checks for updates if settings allow", async () => {
     Object.defineProperty(process, "platform", { value: "win32" })
-    
+
     await checkForUpdates()
-    
+
     expect(storeIsReady).toHaveBeenCalled()
     expect(autoUpdater.checkForUpdates).toHaveBeenCalled()
   })
 
   it("does not check for updates on linux", async () => {
     Object.defineProperty(process, "platform", { value: "linux" })
-    
+
     await checkForUpdates()
     expect(autoUpdater.checkForUpdates).not.toHaveBeenCalled()
   })
