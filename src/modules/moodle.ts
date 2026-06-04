@@ -276,9 +276,14 @@ export class MoodleClient extends EventEmitter {
     if (!this.waitingForCourses) {
       // if not already waiting for the api resposne, make the call and retrieve updated courses
       this.waitingForCourses = true
-      this.getCoursesWithoutCache(true).then(() => {
-        this.waitingForCourses = false
-      })
+      this.getCoursesWithoutCache(true)
+        .then(() => {
+          this.waitingForCourses = false
+        })
+        .catch(err => {
+          this.waitingForCourses = false
+          debug(`Background courses refresh failed: ${err.message}`)
+        })
     }
     return this.cachedCourses
   }
