@@ -54,11 +54,14 @@ export function setupIpc() {
     await loginManager.createLoginWindow()
   })
 
-  ipcMain.on("set-should-sync", async (e, courseid: number, shouldSync: boolean) => {
-    await storeIsReady()
-    store.data.persistence.courses[courseid].shouldSync = shouldSync
-    await store.write()
-  })
+  ipcMain.on(
+    "set-should-sync",
+    async (e, courseid: number, shouldSync: boolean) => {
+      await storeIsReady()
+      store.data.persistence.courses[courseid].shouldSync = shouldSync
+      await store.write()
+    },
+  )
 
   ipcMain.on("sync-start", e => downloadManager.sync())
   ipcMain.on("sync-stop", e => downloadManager.stop())
@@ -111,12 +114,23 @@ export function setupIpc() {
   ipcMain.handle("set-settings", async (e, newSettings) => {
     store.data.settings = { ...store.data.settings, ...newSettings }
 
-    if (isNaN(store.data.settings.maxConcurrentDownloads) || store.data.settings.maxConcurrentDownloads < 1)
+    if (
+      isNaN(store.data.settings.maxConcurrentDownloads) ||
+      store.data.settings.maxConcurrentDownloads < 1
+    )
       store.data.settings.maxConcurrentDownloads = 1
 
-    if ((!store.data.settings.keepOpenInBackground || !store.data.settings.trayIcon) && tray !== null) {
+    if (
+      (!store.data.settings.keepOpenInBackground ||
+        !store.data.settings.trayIcon) &&
+      tray !== null
+    ) {
       tray.destroy()
-    } else if (store.data.settings.keepOpenInBackground && store.data.settings.trayIcon && (tray === null || tray.isDestroyed())) {
+    } else if (
+      store.data.settings.keepOpenInBackground &&
+      store.data.settings.trayIcon &&
+      (tray === null || tray.isDestroyed())
+    ) {
       setupTray()
       await updateTrayContext()
     }
@@ -145,14 +159,19 @@ export function setupIpc() {
   ipcMain.handle("rename-course", async (e, id: number, newName: string) => {
     let success = true
     try {
-      const oldPath = path.resolve(store.data.settings.downloadPath, store.data.persistence.courses[id].name)
+      const oldPath = path.resolve(
+        store.data.settings.downloadPath,
+        store.data.persistence.courses[id].name,
+      )
       const newPath = path.resolve(store.data.settings.downloadPath, newName)
       debug(`Renamed course ${id} to ${newName}`)
       await fs.rename(oldPath, newPath)
     } catch (err: any) {
       if (err.code !== "ENOENT") {
         success = false
-        error(`An error occoured while renaming a course folder ${id} to ${newName}, was a file inside it open? err: ${err.code}`)
+        error(
+          `An error occoured while renaming a course folder ${id} to ${newName}, was a file inside it open? err: ${err.code}`,
+        )
         error(err)
       }
     } finally {

@@ -1,7 +1,14 @@
 import path from "path"
 import { EventEmitter } from "events"
 import fs from "fs/promises"
-import { app, BrowserWindow, protocol, session, safeStorage, dialog } from "electron"
+import {
+  app,
+  BrowserWindow,
+  protocol,
+  session,
+  safeStorage,
+  dialog,
+} from "electron"
 
 import { createLogger } from "./logger"
 const { log, debug } = createLogger("LoginManager")
@@ -144,13 +151,14 @@ class LoginManager extends EventEmitter {
           ? safeStorage.encryptString(token)
           : token
         fs.writeFile(tokenPath, tokenToStore) // writes the token to file
-        
+
         if (!safeStorage.isEncryptionAvailable()) {
           dialog.showMessageBox({
             type: "warning",
             title: "Encryption Unavailable",
-            message: "Missing tools for safe storage. Your login token is being stored in plaintext. Please install a keyring/secret service for better security.",
-            buttons: ["OK"]
+            message:
+              "Missing tools for safe storage. Your login token is being stored in plaintext. Please install a keyring/secret service for better security.",
+            buttons: ["OK"],
           })
         }
       })

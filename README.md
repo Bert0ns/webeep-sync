@@ -106,10 +106,10 @@ e dovrebbe tutto funzionare senza problemi
 
 Prerequisiti:
 
--   [git](https://git-scm.com)
--   [NodeJS](https://nodejs.org) (v18, consigliata fortemente l'installazione via
-    [nvm](https://github.com/nvm-sh/nvm))
--   [Yarn](https://yarnpkg.com/getting-started/install)
+- [git](https://git-scm.com)
+- [NodeJS](https://nodejs.org) (v18, consigliata fortemente l'installazione via
+  [nvm](https://github.com/nvm-sh/nvm))
+- [Yarn](https://yarnpkg.com/getting-started/install)
 
 Per prima cosa scarica l'app
 
@@ -160,17 +160,17 @@ Grazie mille 🥺❤️
 
 ## Features
 
--   scarica tutti i file da WeBeep con un solo click nella cartella che preferisci
--   puoi rinominare le cartelle dei singoli corsi
--   puoi selezionare quali dei tuoi corsi sincronizzare
--   puoi configurare l'app per rimanere aperta in background, e impostare ogni quanto fare un autosync
--   puoi scegliere di avviare l'app al login, silenziosamente per assicurarti di avere sempre i file
-    aggiornati
--   puoi selezionare tra tema chiaro 🌞 e scuro 🌚
--   disponibile sia in Italiano 🇮🇹 che in Inglese 🇬🇧
--   voglio dire è un'app per scaricare dei file non so quante funzioni potrebbe mai avere
--   non so più cosa inventarmi come "features", cioè scaricala e vedi, al massimo la cancelli se non
-    ti piace idk, non pesa nemmeno poi molto dai
+- scarica tutti i file da WeBeep con un solo click nella cartella che preferisci
+- puoi rinominare le cartelle dei singoli corsi
+- puoi selezionare quali dei tuoi corsi sincronizzare
+- puoi configurare l'app per rimanere aperta in background, e impostare ogni quanto fare un autosync
+- puoi scegliere di avviare l'app al login, silenziosamente per assicurarti di avere sempre i file
+  aggiornati
+- puoi selezionare tra tema chiaro 🌞 e scuro 🌚
+- disponibile sia in Italiano 🇮🇹 che in Inglese 🇬🇧
+- voglio dire è un'app per scaricare dei file non so quante funzioni potrebbe mai avere
+- non so più cosa inventarmi come "features", cioè scaricala e vedi, al massimo la cancelli se non
+  ti piace idk, non pesa nemmeno poi molto dai
 
 Ok ma cosa si scrive in fondo a un README? Cioè qualcuno legge anche fino in fondo?
 Ecco video di gattini come ricompensa per essere arrivato fin quaggiù:
@@ -252,10 +252,10 @@ and everything should work without problems
 
 Prerequisites:
 
--   [git](https://git-scm.com)
--   [NodeJS](https://nodejs.org) (v18, I strongly recommend to install it via
-    [nvm](https://github.com/nvm-sh/nvm))
--   [Yarn](https://yarnpkg.com/getting-started/install)
+- [git](https://git-scm.com)
+- [NodeJS](https://nodejs.org) (v18, I strongly recommend to install it via
+  [nvm](https://github.com/nvm-sh/nvm))
+- [Yarn](https://yarnpkg.com/getting-started/install)
 
 First of all, download the app
 
@@ -305,17 +305,17 @@ Thank you very much 🥺❤️
 
 ## Features
 
--   download all the files from WeBeep with a single click in the folder you prefer
--   you can rename the folders of individual courses
--   you can select which of your courses to synchronize
--   you can configure the app to stay open in the background, and set how often to do an autosync
--   you can choose to start the app when you login, silently to make sure you always have the latest files
-    updated
--   you can select between light 🌞 and dark 🌚 theme
--   available in both Italian 🇮🇹 and English 🇬🇧.
--   I mean it's an app to download files I don't know how many functions it could possibly have.
--   I don't know what to come up with as "features" anymore, i.e. download it and see, at most delete it if you don't
-    you don't like idk, it doesn't even weigh that much.
+- download all the files from WeBeep with a single click in the folder you prefer
+- you can rename the folders of individual courses
+- you can select which of your courses to synchronize
+- you can configure the app to stay open in the background, and set how often to do an autosync
+- you can choose to start the app when you login, silently to make sure you always have the latest files
+  updated
+- you can select between light 🌞 and dark 🌚 theme
+- available in both Italian 🇮🇹 and English 🇬🇧.
+- I mean it's an app to download files I don't know how many functions it could possibly have.
+- I don't know what to come up with as "features" anymore, i.e. download it and see, at most delete it if you don't
+  you don't like idk, it doesn't even weigh that much.
 
 Ok but what is written at the bottom of a README? I mean does anyone read all the way to the bottom?
 Here is a video of kittens as a reward for getting this far:

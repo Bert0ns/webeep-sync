@@ -94,7 +94,8 @@ app.on("ready", async () => {
   await i18n.changeLanguage(store.data.settings.language)
 
   // if the app was opened at login, do not show the window, only launch it in the tray
-  const trayOnly = loginItemSettings.wasOpenedAtLogin || process.argv.includes("--tray-only")
+  const trayOnly =
+    loginItemSettings.wasOpenedAtLogin || process.argv.includes("--tray-only")
   if (!trayOnly || !store.data.settings.keepOpenInBackground) createWindow()
   else {
     debug("Starting app in tray only")
@@ -103,16 +104,24 @@ app.on("ready", async () => {
 
   nativeTheme.themeSource = store.data.settings.nativeThemeSource
 
-  if (store.data.settings.keepOpenInBackground && store.data.settings.trayIcon) {
+  if (
+    store.data.settings.keepOpenInBackground &&
+    store.data.settings.trayIcon
+  ) {
     setupTray()
     await updateTrayContext()
   }
 
   // handle launch item settings
-  const disable = !(loginItemSettings.launchItems?.reduce((d, i) => i.enabled && d, true) ?? true)
+  const disable = !(
+    loginItemSettings.launchItems?.reduce((d, i) => i.enabled && d, true) ??
+    true
+  )
   if (disable) {
     store.data.settings.openAtLogin = false
-    debug("openAtLogin was disabled from Task Manager, settings updated accordingly")
+    debug(
+      "openAtLogin was disabled from Task Manager, settings updated accordingly",
+    )
     await store.write()
   }
   await setLoginItem(store.data.settings.openAtLogin)

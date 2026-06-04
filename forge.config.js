@@ -51,7 +51,7 @@ module.exports = {
             {
               path: path.resolve(
                 __dirname,
-                `out/WeBeep Sync-darwin-${arch}/WeBeep Sync.app`
+                `out/WeBeep Sync-darwin-${arch}/WeBeep Sync.app`,
               ),
               type: "file",
               x: 120,
@@ -183,7 +183,7 @@ module.exports = {
             if (art.endsWith(".deb")) {
               const newName = path.resolve(
                 path.dirname(art),
-                "webeep-sync-debian.deb"
+                "webeep-sync-debian.deb",
               )
               console.log(`Renaming ${art} to ${newName}`)
               fs.renameSync(art, newName)
@@ -192,7 +192,7 @@ module.exports = {
             if (art.endsWith(".rpm")) {
               const newName = path.resolve(
                 path.dirname(art),
-                "webeep-sync-redhat.rpm"
+                "webeep-sync-redhat.rpm",
               )
               console.log(`Renaming ${art} to ${newName}`)
               fs.renameSync(art, newName)

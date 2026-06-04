@@ -50,14 +50,21 @@ export function setupUpdater() {
   })
 
   // check for updates every hour
-  setInterval(() => {
-    checkForUpdates()
-  }, 60 * 60 * 1000)
+  setInterval(
+    () => {
+      checkForUpdates()
+    },
+    60 * 60 * 1000,
+  )
 }
 
 export async function checkForUpdates() {
   await storeIsReady()
-  if (!DEV && process.platform !== "linux" && store.data.settings.automaticUpdates) {
+  if (
+    !DEV &&
+    process.platform !== "linux" &&
+    store.data.settings.automaticUpdates
+  ) {
     const { debug } = createLogger("UPDATE")
     debug("checking for updates")
     autoUpdater.checkForUpdates()

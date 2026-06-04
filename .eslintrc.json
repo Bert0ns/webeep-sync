@@ -19,39 +19,19 @@
     "prettier"
   ],
   "parser": "@typescript-eslint/parser",
-  "plugins": [
-    "react",
-    "@typescript-eslint",
-    "prettier"
-  ],
+  "plugins": ["react", "@typescript-eslint", "prettier"],
   "rules": {
     "prettier/prettier": "error",
-    "no-extra-parens": [
-      "off"
-    ],
-    "linebreak-style": [
-      "error",
-      "unix"
-    ],
-    "quotes": [
-      "error",
-      "double"
-    ],
-    "react/prop-types": [
-      "off"
-    ],
-    "react/no-multi-comp": [
-      "error"
-    ],
-    "react/self-closing-comp": [
-      "error"
-    ],
+    "no-extra-parens": ["off"],
+    "linebreak-style": ["error", "unix"],
+    "quotes": ["error", "double"],
+    "react/prop-types": ["off"],
+    "react/no-multi-comp": ["error"],
+    "react/self-closing-comp": ["error"],
     "import/no-unresolved": [
       2,
       {
-        "ignore": [
-          "got"
-        ]
+        "ignore": ["got"]
       }
     ],
     "import/no-named-as-default-member": "off",
