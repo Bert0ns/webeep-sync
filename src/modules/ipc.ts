@@ -59,7 +59,24 @@ export function setupIpc() {
     async (e, courseid: number, shouldSync: boolean) => {
       await storeIsReady()
       store.data.persistence.courses[courseid].shouldSync = shouldSync
+      const cached = moodleClient.cachedCourses.find(c => c.id === courseid)
+      if (cached) cached.shouldSync = shouldSync
       await store.write()
+    },
+  )
+
+  ipcMain.on(
+    "set-should-sync-all",
+    async (e, shouldSync: boolean) => {
+      await storeIsReady()
+      for (const id in store.data.persistence.courses) {
+        store.data.persistence.courses[id].shouldSync = shouldSync
+      }
+      for (const course of moodleClient.cachedCourses) {
+        course.shouldSync = shouldSync
+      }
+      await store.write()
+      e.sender.send("courses", moodleClient.cachedCourses)
     },
   )
 

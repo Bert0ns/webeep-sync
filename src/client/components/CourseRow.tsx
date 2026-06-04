@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react"
+import React, { FC, useState, useEffect } from "react"
 import { Checkbox } from "./Checkbox"
 import { Course } from "../../modules/moodle"
 import { ipcRenderer } from "electron"
@@ -15,6 +15,10 @@ export const CourseRow: FC<{
   const [checked, setChecked] = useState(props.course.shouldSync)
   const [folder, setFolder] = useState(props.course.name)
   const [editing, setEditing] = useState(false)
+
+  useEffect(() => {
+    setChecked(props.course.shouldSync)
+  }, [props.course.shouldSync])
 
   const { t } = useTranslation("client", { keyPrefix: "courseList.row" })
 
