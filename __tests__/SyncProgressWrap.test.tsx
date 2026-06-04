@@ -9,20 +9,22 @@ import { SyncProgressWrap } from "../src/client/components/SyncProgressWrap"
 jest.mock("react-i18next", () => ({
   useTranslation: () => ({
     t: (key: string) => key,
-  })
+  }),
 }))
 
 jest.mock("../src/util", () => ({
   formatSize: (size: number) => `SIZE_${size}`,
-  breakableString: (str: string) => str
+  breakableString: (str: string) => str,
 }))
 
 jest.mock("../src/client/components/ProgressBar", () => ({
-  PrograssBar: ({ progress }: any) => <div data-testid="progress-bar">{progress}</div>
+  PrograssBar: ({ progress }: any) => (
+    <div data-testid="progress-bar">{progress}</div>
+  ),
 }))
 
 jest.mock("../src/client/components/SyncProgressList", () => ({
-  SyncProgressList: () => <div data-testid="sync-progress-list" />
+  SyncProgressList: () => <div data-testid="sync-progress-list" />,
 }))
 
 describe("SyncProgressWrap", () => {
@@ -34,14 +36,14 @@ describe("SyncProgressWrap", () => {
         filename: "file1.txt",
         absolutePath: "/path/file1.txt",
         downloaded: 10,
-        total: 20
-      }
-    ]
+        total: 20,
+      },
+    ],
   }
 
   it("renders progress bars correctly with single file", () => {
     render(<SyncProgressWrap progress={mockProgress as any} />)
-    
+
     expect(screen.queryByTestId("sync-progress-list")).not.toBeInTheDocument()
 
     expect(screen.getByText("file1.txt")).toBeInTheDocument()
@@ -59,9 +61,9 @@ describe("SyncProgressWrap", () => {
           filename: "file2.txt",
           absolutePath: "/path/file2.txt",
           downloaded: 0,
-          total: 10
-        }
-      ]
+          total: 10,
+        },
+      ],
     }
 
     render(<SyncProgressWrap progress={multiFilesProgress as any} />)

@@ -1,7 +1,7 @@
 import {
   setupNotifications,
   getSyncedItems,
-  getNotificationToBeOpened
+  getNotificationToBeOpened,
 } from "../src/modules/notifications"
 import { Notification } from "electron"
 import { downloadManager } from "../src/modules/download"
@@ -18,22 +18,22 @@ jest.mock("electron", () => {
         show: jest.fn(),
       })),
       {
-        isSupported: jest.fn().mockReturnValue(true)
-      }
-    )
+        isSupported: jest.fn().mockReturnValue(true),
+      },
+    ),
   }
 })
 
 jest.mock("../src/modules/download", () => ({
   downloadManager: {
     on: jest.fn(),
-  }
+  },
 }))
 
 jest.mock("../src/modules/moodle", () => ({
   moodleClient: {
     on: jest.fn(),
-  }
+  },
 }))
 
 jest.mock("../src/modules/store", () => ({
@@ -43,26 +43,26 @@ jest.mock("../src/modules/store", () => ({
       settings: {
         keepOpenInBackground: true,
         notificationOnNewFiles: true,
-        notificationOnMessage: true
+        notificationOnMessage: true,
       },
       persistence: {
         sentMessageNotifications: {},
-        notificationsHasBeenSent: true
-      }
+        notificationsHasBeenSent: true,
+      },
     },
-    write: jest.fn()
-  }
+    write: jest.fn(),
+  },
 }))
 
 jest.mock("../src/modules/window", () => ({
   send: jest.fn(),
-  focus: jest.fn()
+  focus: jest.fn(),
 }))
 
 jest.mock("../src/modules/i18next", () => ({
   i18n: {
-    getFixedT: () => (key: string) => key
-  }
+    getFixedT: () => (key: string) => key,
+  },
 }))
 
 describe("notifications module", () => {
@@ -78,8 +78,14 @@ describe("notifications module", () => {
 
   it("sets up listeners", () => {
     setupNotifications()
-    expect(downloadManager.on).toHaveBeenCalledWith("new-files", expect.any(Function))
-    expect(moodleClient.on).toHaveBeenCalledWith("notifications", expect.any(Function))
+    expect(downloadManager.on).toHaveBeenCalledWith(
+      "new-files",
+      expect.any(Function),
+    )
+    expect(moodleClient.on).toHaveBeenCalledWith(
+      "notifications",
+      expect.any(Function),
+    )
   })
 
   it("handles new-files when window send fails (background)", async () => {

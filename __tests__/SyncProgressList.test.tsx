@@ -9,16 +9,18 @@ import { SyncProgressList } from "../src/client/components/SyncProgressList"
 jest.mock("react-icons/io5", () => ({
   IoEllipsisHorizontal: ({ onClick, className }: any) => (
     <div data-testid="ellipsis" className={className} onClick={onClick} />
-  )
+  ),
 }))
 
 jest.mock("../src/client/components/ProgressBar", () => ({
-  PrograssBar: ({ progress }: any) => <div data-testid="progress-bar">{progress}</div>
+  PrograssBar: ({ progress }: any) => (
+    <div data-testid="progress-bar">{progress}</div>
+  ),
 }))
 
 jest.mock("../src/util", () => ({
   breakableString: (str: string) => str,
-  formatSize: (size: number) => `SIZE_${size}`
+  formatSize: (size: number) => `SIZE_${size}`,
 }))
 
 describe("SyncProgressList", () => {
@@ -34,7 +36,7 @@ describe("SyncProgressList", () => {
   it("shows tooltip on mouse over and click, hides on mouse out", async () => {
     const files = [
       { filename: "file1", absolutePath: "/f1", downloaded: 10, total: 10 },
-      { filename: "file2", absolutePath: "/f2", downloaded: 5, total: 10 }
+      { filename: "file2", absolutePath: "/f2", downloaded: 5, total: 10 },
     ]
 
     const { container } = render(<SyncProgressList files={files as any} />)
@@ -59,7 +61,7 @@ describe("SyncProgressList", () => {
     act(() => {
       jest.advanceTimersByTime(25)
     })
-    
+
     await waitFor(() => {
       expect(screen.queryByText("file2")).not.toBeInTheDocument()
     })

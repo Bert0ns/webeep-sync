@@ -15,9 +15,17 @@ export const CourseList: FC<{ courses: Course[] }> = props => {
 
   return (
     <div className="course-list section" style={{ position: "relative" }}>
-      <button 
-        className="discard-button" 
-        style={{ position: "absolute", top: "12px", right: "12px", padding: "4px 12px", fontSize: "0.8em", borderRadius: "12px", zIndex: 10 }} 
+      <button
+        className="discard-button"
+        style={{
+          position: "absolute",
+          top: "12px",
+          right: "12px",
+          padding: "4px 12px",
+          fontSize: "0.8em",
+          borderRadius: "12px",
+          zIndex: 10,
+        }}
         onClick={toggleAll}
       >
         {allSelected ? t("deselectAll") : t("selectAll")}

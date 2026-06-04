@@ -19,28 +19,35 @@ jest.mock("electron", () => {
       trigger: (channel: string, ...args: any[]) => {
         if (listeners[channel]) listeners[channel]({} as any, ...args)
       },
-      clear: () => { listeners = {} }
+      clear: () => {
+        listeners = {}
+      },
     },
     shell: {
       openPath: jest.fn(),
-    }
+    },
   }
 })
 
 jest.mock("react-i18next", () => ({
   useTranslation: () => ({
     t: (key: string) => key,
-  })
+  }),
 }))
 
 jest.mock("../src/client/components/Switch", () => ({
   Switch: ({ onChange, checked }: any) => (
-    <input type="checkbox" data-testid="switch" checked={checked} onChange={(e) => onChange(e.target.checked)} />
-  )
+    <input
+      type="checkbox"
+      data-testid="switch"
+      checked={checked}
+      onChange={e => onChange(e.target.checked)}
+    />
+  ),
 }))
 
 jest.mock("../src/util", () => ({
-  breakableString: (str: string) => str
+  breakableString: (str: string) => str,
 }))
 
 describe("SyncSettings", () => {
@@ -56,11 +63,11 @@ describe("SyncSettings", () => {
 
   it("updates path and can open/edit it", () => {
     render(<SyncSettings />)
-    
+
     act(() => {
       ;(ipcRenderer as any).trigger("download-path", "/my/mock/path")
     })
-    
+
     expect(screen.getByText("/my/mock/path")).toBeInTheDocument()
 
     // Test open
@@ -76,12 +83,12 @@ describe("SyncSettings", () => {
 
   it("updates autosync and syncInterval", () => {
     render(<SyncSettings />)
-    
+
     act(() => {
       ;(ipcRenderer as any).trigger("autosync", true)
       ;(ipcRenderer as any).trigger("autosync-interval", 7200000) // 2 hours
     })
-    
+
     const switchEl = screen.getByTestId("switch")
     expect(switchEl).toBeChecked()
 
@@ -91,17 +98,20 @@ describe("SyncSettings", () => {
 
   it("can toggle autosync and change interval", () => {
     render(<SyncSettings />)
-    
+
     act(() => {
       ;(ipcRenderer as any).trigger("autosync", true)
     })
-    
+
     const switchEl = screen.getByTestId("switch")
     fireEvent.click(switchEl) // toggles off
     expect(ipcRenderer.send).toHaveBeenCalledWith("set-autosync", false)
-    
+
     const selectEl = screen.getByRole("combobox")
     fireEvent.change(selectEl, { target: { value: "8" } })
-    expect(ipcRenderer.send).toHaveBeenCalledWith("set-autosync-interval", 8 * 60 * 60 * 1000)
+    expect(ipcRenderer.send).toHaveBeenCalledWith(
+      "set-autosync-interval",
+      8 * 60 * 60 * 1000,
+    )
   })
 })

@@ -49,7 +49,7 @@ export const MainView: FC<{
     ipcRenderer.on("syncing", onSyncing)
     ipcRenderer.on("new-update", onNewUpdate)
     ipcRenderer.on("update-available", onUpdateAvailable)
-    
+
     updateTime()
 
     return () => {

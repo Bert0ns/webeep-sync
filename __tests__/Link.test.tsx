@@ -10,7 +10,7 @@ import { shell } from "electron"
 jest.mock("electron", () => ({
   shell: {
     openExternal: jest.fn(),
-  }
+  },
 }))
 
 describe("Link", () => {
@@ -20,9 +20,13 @@ describe("Link", () => {
 
   it("renders children and classes", () => {
     render(
-      <Link href="https://example.com" className="my-class" style={{ color: "red" }}>
+      <Link
+        href="https://example.com"
+        className="my-class"
+        style={{ color: "red" }}
+      >
         Click me
-      </Link>
+      </Link>,
     )
 
     const anchor = screen.getByText("Click me")

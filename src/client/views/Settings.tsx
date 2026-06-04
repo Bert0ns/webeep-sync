@@ -244,10 +244,7 @@ export const SettingsModal: FC<{ onClose: () => void }> = props => {
           </span>
 
           <div className="button-line-container">
-            <button
-              className="discard-button"
-              onClick={handleCancel}
-            >
+            <button className="discard-button" onClick={handleCancel}>
               {t("cancel")}
             </button>
             <button

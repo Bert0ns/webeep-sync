@@ -22,7 +22,7 @@ export const NotificationList: FC = props => {
   const [toBeOpened, setToBeOpened] = useState<number | null>(null)
   const [unread, setUnread] = useState(0)
   const [shadow, setShadow] = useState(false)
-  
+
   const [dimensions, setDimensions] = useState(() => {
     const saved = localStorage.getItem("notification-panel-dimensions")
     if (saved) {
@@ -64,7 +64,7 @@ export const NotificationList: FC = props => {
   useEffect(() => {
     if (showingTooltip)
       ipcRenderer.invoke("get-notifications").then(n => setNotifications(n))
-      
+
     if (showingTooltip && wrapRef.current) {
       let timeout: NodeJS.Timeout
       const observer = new ResizeObserver(entries => {
@@ -74,7 +74,10 @@ export const NotificationList: FC = props => {
             const el = entry.target as HTMLDivElement
             const newDim = { width: el.offsetWidth, height: el.offsetHeight }
             setDimensions(newDim)
-            localStorage.setItem("notification-panel-dimensions", JSON.stringify(newDim))
+            localStorage.setItem(
+              "notification-panel-dimensions",
+              JSON.stringify(newDim),
+            )
           }
         }, 300)
       })

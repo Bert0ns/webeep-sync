@@ -445,7 +445,9 @@ $modal-anim-time: 0.15s;
           background-color: transparent;
           border-bottom: 2px solid #888;
           border-right: 2px solid #888;
-          box-shadow: inset -2px -2px 0 0 $almost-white, inset -4px -4px 0 0 #888;
+          box-shadow:
+            inset -2px -2px 0 0 $almost-white,
+            inset -4px -4px 0 0 #888;
           outline: 2px solid $almost-white;
         }
 

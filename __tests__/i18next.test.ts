@@ -11,12 +11,14 @@ describe("i18next module", () => {
     const initSpy = jest.spyOn(i18n, "init").mockResolvedValue({} as any)
 
     await i18nInit()
-    
+
     expect(useSpy).toHaveBeenCalled()
-    expect(initSpy).toHaveBeenCalledWith(expect.objectContaining({
-      fallbackLng: "en",
-      defaultNS: "common"
-    }))
+    expect(initSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        fallbackLng: "en",
+        defaultNS: "common",
+      }),
+    )
 
     // Subsequent calls resolve immediately
     await i18nInit()
