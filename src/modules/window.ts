@@ -25,7 +25,7 @@ export async function createWindow(): Promise<void> {
       height: 600,
       width: 800,
       autoHideMenuBar: true,
-      titleBarStyle: "hidden",
+      titleBarStyle: "default",
       trafficLightPosition: { x: 9, y: 9 },
       minHeight: 460,
       minWidth: 600,
