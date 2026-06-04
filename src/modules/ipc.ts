@@ -166,6 +166,7 @@ export function setupIpc() {
       const newPath = path.resolve(store.data.settings.downloadPath, newName)
       debug(`Renamed course ${id} to ${newName}`)
       await fs.rename(oldPath, newPath)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       if (err.code !== "ENOENT") {
         success = false

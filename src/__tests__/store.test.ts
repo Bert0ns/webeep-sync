@@ -20,10 +20,10 @@ jest.mock("fs/promises", () => ({
 jest.mock("lowdb", () => {
   return {
     Low: class MockLow {
-      data: any
+      data: unknown
       read = jest.fn().mockResolvedValue(undefined)
       write = jest.fn().mockResolvedValue(undefined)
-      constructor(adapter: any, defaultData: any) {
+      constructor(adapter: unknown, defaultData: unknown) {
         this.data = defaultData
       }
     },
@@ -34,7 +34,7 @@ jest.mock("lowdb/node", () => ({
   JSONFile: class MockJSONFile {},
 }))
 
-import { storeIsReady, store, defaultSettings } from "../modules/store"
+import { storeIsReady, store } from "../modules/store"
 
 describe("Store", () => {
   it("initializes store and populates default settings", async () => {
