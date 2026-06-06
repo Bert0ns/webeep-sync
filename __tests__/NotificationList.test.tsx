@@ -1,6 +1,8 @@
 /**
  * @jest-environment jsdom
  */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import React from "react"
 import { render, screen, act, fireEvent } from "@testing-library/react"
 import "@testing-library/jest-dom"
@@ -8,7 +10,7 @@ import { NotificationList } from "../src/client/components/NotificationList"
 import { ipcRenderer } from "electron"
 
 jest.mock("electron", () => {
-  let listeners: unknown = {}
+  let listeners: any = {}
   return {
     ipcRenderer: {
       invoke: jest.fn().mockResolvedValue(null),
@@ -16,8 +18,8 @@ jest.mock("electron", () => {
         listeners[channel] = cb
       }),
       send: jest.fn(),
-      trigger: (channel: string, ...args: unknown[]) => {
-        if (listeners[channel]) listeners[channel]({} as unknown, ...args)
+      trigger: (channel: string, ...args: any[]) => {
+        if (listeners[channel]) listeners[channel]({} as any, ...args)
       },
       clear: () => {
         listeners = {}
@@ -44,7 +46,7 @@ global.ResizeObserver = class ResizeObserver {
 describe("NotificationList", () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(ipcRenderer as unknown).clear()
+    ;(ipcRenderer as any).clear()
     localStorage.clear()
   })
 
@@ -84,7 +86,7 @@ describe("NotificationList", () => {
     })
 
     await act(async () => {
-      ;(ipcRenderer as unknown).trigger("notifications", [
+      ;(ipcRenderer as any).trigger("notifications", [
         { id: 1, read: false, text: "hello" },
       ])
     })

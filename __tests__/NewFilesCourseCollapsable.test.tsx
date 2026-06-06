@@ -1,6 +1,8 @@
 /**
  * @jest-environment jsdom
  */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import React from "react"
 import { render, screen, fireEvent } from "@testing-library/react"
 import "@testing-library/jest-dom"
@@ -47,10 +49,7 @@ describe("NewFilesCourseCollapsable", () => {
 
   it("renders open by default with file list", () => {
     render(
-      <NewFilesCourseCollapsable
-        name="Math 101"
-        files={mockFiles as unknown}
-      />,
+      <NewFilesCourseCollapsable name="Math 101" files={mockFiles as any} />,
     )
 
     expect(screen.getByText("Math 101 (2)")).toBeInTheDocument()
@@ -62,10 +61,7 @@ describe("NewFilesCourseCollapsable", () => {
 
   it("toggles file list on click", () => {
     render(
-      <NewFilesCourseCollapsable
-        name="Math 101"
-        files={mockFiles as unknown}
-      />,
+      <NewFilesCourseCollapsable name="Math 101" files={mockFiles as any} />,
     )
 
     // Initially files are shown
@@ -87,7 +83,7 @@ describe("NewFilesCourseCollapsable", () => {
     render(
       <NewFilesCourseCollapsable
         name="Math 101"
-        files={[mockFiles[0]] as unknown}
+        files={[mockFiles[0]] as any}
       />,
     )
 

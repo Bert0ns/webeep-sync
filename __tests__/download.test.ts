@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DownloadManager } from "../src/modules/download"
 import { store } from "../src/modules/store"
 import { SyncResult } from "../src/util"
@@ -20,8 +21,8 @@ jest.mock("stream/promises", () => ({
 
 jest.mock("got", () => {
   const HTTPError = class extends Error {
-    response: unknown
-    constructor(resp: unknown) {
+    response: any
+    constructor(resp: any) {
       super()
       this.name = "HTTPError"
       this.response = resp
@@ -136,10 +137,10 @@ describe("DownloadManager", () => {
   it("stop should cancel requests and set stopped to true", () => {
     const cancelMock = jest.fn()
     downloadManager.currentDownloads = [
-      { cancel: cancelMock, progress: {} as unknown },
+      { cancel: cancelMock, progress: {} as any },
     ]
     downloadManager.stop()
-    expect((downloadManager as unknown).stopped).toBe(true)
+    expect((downloadManager as any).stopped).toBe(true)
     expect(cancelMock).toHaveBeenCalled()
   })
 

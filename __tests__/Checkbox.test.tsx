@@ -1,7 +1,8 @@
-/* eslint-disable react/no-multi-comp */
 /**
  * @jest-environment jsdom
  */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react/no-multi-comp */
 import React from "react"
 import { render, screen, fireEvent } from "@testing-library/react"
 import "@testing-library/jest-dom"
@@ -9,10 +10,10 @@ import { Checkbox } from "../src/client/components/Checkbox"
 
 // Mock the icons
 jest.mock("react-icons/io5", () => ({
-  IoCheckbox: ({ onClick, className }: unknown) => (
+  IoCheckbox: ({ onClick, className }: any) => (
     <svg data-testid="positive-icon" onClick={onClick} className={className} />
   ),
-  IoSquareOutline: ({ onClick, color }: unknown) => (
+  IoSquareOutline: ({ onClick, color }: any) => (
     <svg data-testid="negative-icon" onClick={onClick} style={{ color }} />
   ),
 }))

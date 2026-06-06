@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { tray, setupTray, updateTrayContext } from "../src/modules/tray"
 import { Tray, Menu, shell, BrowserWindow } from "electron"
 import { downloadManager } from "../src/modules/download"
@@ -71,7 +72,7 @@ jest.mock("../src/modules/i18next", () => ({
 describe("tray", () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(Tray as unknown as jest.Mock).mockClear()
+    ;(Tray as any as jest.Mock).mockClear()
   })
 
   it("setupTray should initialize tray correctly", () => {
@@ -85,10 +86,10 @@ describe("tray", () => {
     // We cannot easily test when tray is null because it's exported and initialized
     // but if it is we can mock it
     const originalTray = tray
-    ;(tray as unknown) = null
+    ;(tray as any) = null
     await updateTrayContext()
     expect(Menu.buildFromTemplate).not.toHaveBeenCalled()
-    ;(tray as unknown) = originalTray
+    ;(tray as any) = originalTray
   })
 
   it("updateTrayContext should update the menu", async () => {
@@ -123,7 +124,7 @@ describe("tray", () => {
 
   it("updateTrayContext should render correctly when syncing is true", async () => {
     setupTray()
-    ;(downloadManager as unknown).syncing = true
+    ;(downloadManager as any).syncing = true
     await updateTrayContext()
 
     const menuTpl = (Menu.buildFromTemplate as jest.Mock).mock.calls[0][0]

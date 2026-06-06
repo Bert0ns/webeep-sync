@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { setupIpc } from "../src/modules/ipc"
 import { ipcMain, BrowserWindow, dialog } from "electron"
 import { loginManager } from "../src/modules/login"
@@ -9,8 +10,8 @@ import { tray } from "../src/modules/tray"
 import fs from "fs/promises"
 
 jest.mock("electron", () => {
-  const handlers: unknown = {}
-  const listeners: unknown = {}
+  const handlers: any = {}
+  const listeners: any = {}
   return {
     ipcMain: {
       handle: jest.fn((channel, handler) => {
@@ -19,10 +20,10 @@ jest.mock("electron", () => {
       on: jest.fn((channel, listener) => {
         listeners[channel] = listener
       }),
-      _triggerHandle: (channel: string, event: unknown, ...args: unknown[]) => {
+      _triggerHandle: (channel: string, event: any, ...args: any[]) => {
         if (handlers[channel]) return handlers[channel](event, ...args)
       },
-      _triggerOn: (channel: string, event: unknown, ...args: unknown[]) => {
+      _triggerOn: (channel: string, event: any, ...args: any[]) => {
         if (listeners[channel]) listeners[channel](event, ...args)
       },
     },
@@ -153,18 +154,14 @@ describe("ipc module", () => {
     setupIpc()
   })
 
-  const triggerHandle = (channel: string, ...args: unknown[]) =>
-    (ipcMain as unknown)._triggerHandle(
+  const triggerHandle = (channel: string, ...args: any[]) =>
+    (ipcMain as any)._triggerHandle(
       channel,
       { sender: { send: jest.fn() } },
       ...args,
     )
-  const triggerOn = (
-    channel: string,
-    replyMock?: unknown,
-    ...args: unknown[]
-  ) =>
-    (ipcMain as unknown)._triggerOn(
+  const triggerOn = (channel: string, replyMock?: any, ...args: any[]) =>
+    (ipcMain as any)._triggerOn(
       channel,
       { reply: replyMock, sender: { send: replyMock } },
       ...args,

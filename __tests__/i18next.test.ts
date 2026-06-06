@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { i18nInit, i18n } from "../src/modules/i18next"
 
 jest.mock("i18next-fs-backend", () => {
@@ -8,7 +9,7 @@ describe("i18next module", () => {
   it("initializes i18n successfully", async () => {
     // Spy on i18n.init and i18n.use
     const useSpy = jest.spyOn(i18n, "use").mockReturnThis()
-    const initSpy = jest.spyOn(i18n, "init").mockResolvedValue({} as unknown)
+    const initSpy = jest.spyOn(i18n, "init").mockResolvedValue({} as any)
 
     await i18nInit()
 

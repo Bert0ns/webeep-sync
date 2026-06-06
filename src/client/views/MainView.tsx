@@ -42,7 +42,7 @@ export const MainView: FC<{
     const interval = setInterval(() => updateTime(), 60000)
     const onLanguageChanged = () => updateTime()
     const onSyncing = () => updateTime()
-    const onNewUpdate = (e: unknown, update: unknown) =>
+    const onNewUpdate = (e: unknown, update: boolean) =>
       setUpdateAvailable(update)
     const onUpdateAvailable = (e: unknown) => setUpdateAvailable(true)
 

@@ -1,6 +1,8 @@
 /**
  * @jest-environment jsdom
  */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import React from "react"
 import { render, screen, fireEvent } from "@testing-library/react"
 import "@testing-library/jest-dom"
@@ -24,7 +26,7 @@ jest.mock("react-i18next", () => ({
 
 // Mock components
 jest.mock("../src/client/components/CourseRow", () => ({
-  CourseRow: ({ course }: unknown) => (
+  CourseRow: ({ course }: any) => (
     <div data-testid={`course-${course.id}`}>{course.name}</div>
   ),
 }))

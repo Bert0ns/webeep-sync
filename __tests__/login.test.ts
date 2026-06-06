@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   app,
   BrowserWindow,
@@ -11,8 +12,8 @@ import fs from "fs/promises"
 jest.mock("electron", () => {
   const events = require("events")
   const appEmitter = new events.EventEmitter()
-  ;(appEmitter as unknown).getPath = jest.fn().mockReturnValue("/mock/path")
-  ;(appEmitter as unknown).isReady = jest.fn().mockReturnValue(true)
+  ;(appEmitter as any).getPath = jest.fn().mockReturnValue("/mock/path")
+  ;(appEmitter as any).isReady = jest.fn().mockReturnValue(true)
 
   const mockSession = {
     webRequest: {
@@ -24,9 +25,9 @@ jest.mock("electron", () => {
     app: appEmitter,
     BrowserWindow: jest.fn().mockImplementation(() => {
       const winEmitter = new events.EventEmitter()
-      ;(winEmitter as unknown).loadURL = jest.fn()
-      ;(winEmitter as unknown).focus = jest.fn()
-      ;(winEmitter as unknown).destroy = jest.fn()
+      ;(winEmitter as any).loadURL = jest.fn()
+      ;(winEmitter as any).focus = jest.fn()
+      ;(winEmitter as any).destroy = jest.fn()
       return winEmitter
     }),
     protocol: {
@@ -56,14 +57,14 @@ jest.mock("../src/modules/logger", () => ({
   createLogger: () => ({ log: jest.fn(), debug: jest.fn() }),
 }))
 
-let loginManager: unknown
+let loginManager: any
 
 const flushPromises = () => new Promise(setImmediate)
 
 describe("loginManager", () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(BrowserWindow as unknown).getAllWindows = jest.fn().mockReturnValue([])
+    ;(BrowserWindow as any).getAllWindows = jest.fn().mockReturnValue([])
     jest.isolateModules(() => {
       loginManager = require("../src/modules/login").loginManager
     })
@@ -119,7 +120,7 @@ describe("loginManager", () => {
 
   it("createLoginWindow should resolve to false if closed before token", async () => {
     const promise = loginManager.createLoginWindow()
-    const win = loginManager.loginWindow as unknown
+    const win = loginManager.loginWindow as any
     win.emit("close")
     const result = await promise
     expect(result).toBe(false)

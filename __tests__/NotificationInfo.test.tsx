@@ -1,7 +1,8 @@
-/* eslint-disable react/no-multi-comp */
 /**
  * @jest-environment jsdom
  */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react/no-multi-comp */
 import React from "react"
 import { render, screen, act, fireEvent } from "@testing-library/react"
 import "@testing-library/jest-dom"
@@ -18,7 +19,7 @@ jest.mock("electron", () => ({
 }))
 
 jest.mock("../src/client/components/Modal", () => ({
-  Modal: ({ children, title, onClose }: unknown) => (
+  Modal: ({ children, title, onClose }: any) => (
     <div data-testid="modal">
       <h2>{title}</h2>
       <button onClick={onClose}>Close</button>
@@ -28,7 +29,7 @@ jest.mock("../src/client/components/Modal", () => ({
 }))
 
 jest.mock("../src/client/components/Link", () => ({
-  Link: ({ children, href }: unknown) => (
+  Link: ({ children, href }: any) => (
     <a href={href} data-testid="link">
       {children}
     </a>
@@ -64,7 +65,7 @@ describe("NotificationInfo", () => {
     await act(async () => {
       render(
         <NotificationInfo
-          notification={mockNotification as unknown}
+          notification={mockNotification as any}
           toBeOpened={false}
           onShow={onShow}
         />,
@@ -108,7 +109,7 @@ describe("NotificationInfo", () => {
     await act(async () => {
       render(
         <NotificationInfo
-          notification={notification as unknown}
+          notification={notification as any}
           toBeOpened={true}
         />,
       )

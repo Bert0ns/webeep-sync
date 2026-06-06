@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   setupUpdater,
   checkForUpdates,
@@ -7,8 +8,8 @@ import { autoUpdater, ipcMain } from "electron"
 import { storeIsReady } from "../src/modules/store"
 
 jest.mock("electron", () => {
-  const listeners: unknown = {}
-  const ipcListeners: unknown = {}
+  const listeners: any = {}
+  const ipcListeners: any = {}
   return {
     app: {
       getVersion: jest.fn().mockReturnValue("1.0.0"),
@@ -20,7 +21,7 @@ jest.mock("electron", () => {
       }),
       checkForUpdates: jest.fn(),
       quitAndInstall: jest.fn(),
-      trigger: (event: string, ...args: unknown[]) => {
+      trigger: (event: string, ...args: any[]) => {
         if (listeners[event]) listeners[event](...args)
       },
     },
@@ -28,7 +29,7 @@ jest.mock("electron", () => {
       handle: jest.fn((channel, cb) => {
         ipcListeners[channel] = cb
       }),
-      trigger: (channel: string, ...args: unknown[]) => {
+      trigger: (channel: string, ...args: any[]) => {
         if (ipcListeners[channel]) ipcListeners[channel](...args)
       },
     },
@@ -110,7 +111,7 @@ describe("updater module", () => {
   it("handles update-downloaded event", () => {
     setupUpdater()
     expect(isUpdateAvailable()).toBe(false)
-    ;(autoUpdater as unknown).trigger("update-downloaded")
+    ;(autoUpdater as any).trigger("update-downloaded")
 
     expect(isUpdateAvailable()).toBe(true)
 
@@ -120,7 +121,7 @@ describe("updater module", () => {
 
   it("handles quit-and-install IPC event", () => {
     setupUpdater()
-    ;(ipcMain as unknown).trigger("quit-and-install")
+    ;(ipcMain as any).trigger("quit-and-install")
     expect(autoUpdater.quitAndInstall).toHaveBeenCalled()
   })
 

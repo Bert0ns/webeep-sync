@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createWindow, send, focus } from "../src/modules/window"
 import { app, BrowserWindow } from "electron"
 
@@ -21,9 +22,7 @@ jest.mock("electron", () => {
     nativeImage: {
       createFromPath: jest.fn().mockReturnValue("mock-image"),
     },
-    BrowserWindow: jest
-      .fn()
-      .mockImplementation(() => mBrowserWindow) as unknown,
+    BrowserWindow: jest.fn().mockImplementation(() => mBrowserWindow) as any,
   }
 })
 
@@ -34,7 +33,7 @@ jest.mock("../src/modules/logger", () => ({
 describe("window module", () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(BrowserWindow.getAllWindows as unknown) = jest.fn().mockReturnValue([])
+    ;(BrowserWindow.getAllWindows as any) = jest.fn().mockReturnValue([])
   })
 
   describe("createWindow", () => {
@@ -45,7 +44,7 @@ describe("window module", () => {
           cb()
         }
       })
-      ;(BrowserWindow as unknown as jest.Mock).mockImplementation(() => ({
+      ;(BrowserWindow as any as jest.Mock).mockImplementation(() => ({
         on: mockOn,
         show: jest.fn(),
         loadURL: jest.fn(),
@@ -66,7 +65,7 @@ describe("window module", () => {
 
     it("should send message via webContents", async () => {
       const mBrowserWindow = {
-        on: (event: string, cb: unknown) => {
+        on: (event: string, cb: any) => {
           if (event === "ready-to-show") cb()
         },
         show: jest.fn(),
@@ -76,7 +75,7 @@ describe("window module", () => {
           send: jest.fn(),
         },
       }
-      ;(BrowserWindow as unknown as jest.Mock).mockImplementation(
+      ;(BrowserWindow as any as jest.Mock).mockImplementation(
         () => mBrowserWindow,
       )
 
@@ -96,12 +95,12 @@ describe("window module", () => {
       const mockOn = jest.fn((event, cb) => {
         if (event === "ready-to-show") cb()
       })
-      ;(BrowserWindow as unknown as jest.Mock).mockImplementation(() => ({
+      ;(BrowserWindow as any as jest.Mock).mockImplementation(() => ({
         on: mockOn,
         show: jest.fn(),
         loadURL: jest.fn(),
       }))
-      ;(BrowserWindow.getAllWindows as unknown).mockReturnValue([])
+      ;(BrowserWindow.getAllWindows as any).mockReturnValue([])
 
       await focus()
       expect(BrowserWindow).toHaveBeenCalled()
@@ -110,14 +109,12 @@ describe("window module", () => {
     it("should focus existing window", async () => {
       const mockFocus = jest.fn()
       const mBrowserWindow = {
-        on: (event: string, cb: unknown) => {
+        on: (event: string, cb: any) => {
           if (event === "focus") cb()
         },
         focus: mockFocus,
       }
-      ;(BrowserWindow.getAllWindows as unknown).mockReturnValue([
-        mBrowserWindow,
-      ])
+      ;(BrowserWindow.getAllWindows as any).mockReturnValue([mBrowserWindow])
 
       await focus()
       expect(mockFocus).toHaveBeenCalled()

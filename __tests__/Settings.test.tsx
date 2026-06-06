@@ -1,7 +1,8 @@
-/* eslint-disable react/no-multi-comp */
 /**
  * @jest-environment jsdom
  */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react/no-multi-comp */
 import React from "react"
 import { render, screen, fireEvent } from "@testing-library/react"
 import "@testing-library/jest-dom"
@@ -25,7 +26,7 @@ jest.mock("react-i18next", () => ({
 
 // Mock components
 jest.mock("../src/client/components/Modal", () => ({
-  Modal: ({ children, onClose }: unknown) => (
+  Modal: ({ children, onClose }: any) => (
     <div data-testid="modal">
       <button data-testid="modal-close" onClick={onClose}>
         Close
@@ -40,7 +41,7 @@ jest.mock("../src/client/components/Switch", () => ({
 }))
 
 jest.mock("../src/client/components/Link", () => ({
-  Link: ({ children }: unknown) => <a>{children}</a>,
+  Link: ({ children }: any) => <a>{children}</a>,
 }))
 
 jest.mock("../src/client/assets/polinetwork.svg", () => {

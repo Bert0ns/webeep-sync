@@ -1,7 +1,8 @@
-/* eslint-disable react/no-multi-comp */
 /**
  * @jest-environment jsdom
  */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react/no-multi-comp */
 import React from "react"
 import { render, screen, act } from "@testing-library/react"
 import "@testing-library/jest-dom"
@@ -9,7 +10,7 @@ import { App } from "../src/client/App"
 import { ipcRenderer } from "electron"
 
 jest.mock("electron", () => {
-  let listeners: unknown = {}
+  let listeners: any = {}
   return {
     ipcRenderer: {
       invoke: jest.fn().mockResolvedValue(null),
@@ -17,8 +18,8 @@ jest.mock("electron", () => {
         listeners[channel] = cb
       }),
       send: jest.fn(),
-      trigger: (channel: string, ...args: unknown[]) => {
-        if (listeners[channel]) listeners[channel]({} as unknown, ...args)
+      trigger: (channel: string, ...args: any[]) => {
+        if (listeners[channel]) listeners[channel]({} as any, ...args)
       },
       clear: () => {
         listeners = {}
@@ -29,7 +30,7 @@ jest.mock("electron", () => {
 
 jest.mock("react-i18next", () => ({
   useTranslation: () => ({ t: (k: string) => k }),
-  I18nextProvider: ({ children }: unknown) => <>{children}</>,
+  I18nextProvider: ({ children }: any) => <>{children}</>,
   initReactI18next: { type: "3rdParty", init: jest.fn() },
 }))
 
@@ -67,7 +68,7 @@ jest.mock("../src/client/views/SyncProgress", () => ({
 describe("App", () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(ipcRenderer as unknown).clear()
+    ;(ipcRenderer as any).clear()
   })
 
   it("renders correctly and sets up ipc listeners", async () => {
@@ -84,17 +85,17 @@ describe("App", () => {
 
     // trigger network
     act(() => {
-      ;(ipcRenderer as unknown).trigger("network_event", true)
+      ;(ipcRenderer as any).trigger("network_event", true)
     })
 
     // trigger syncing
     act(() => {
-      ;(ipcRenderer as unknown).trigger("syncing", true)
+      ;(ipcRenderer as any).trigger("syncing", true)
     })
 
     // trigger username
     act(() => {
-      ;(ipcRenderer as unknown).trigger("username", "testuser")
+      ;(ipcRenderer as any).trigger("username", "testuser")
     })
   })
 
@@ -104,8 +105,8 @@ describe("App", () => {
     })
 
     act(() => {
-      ;(ipcRenderer as unknown).trigger("is-logged", true, "test", false)
-      ;(ipcRenderer as unknown).trigger("courses", [{ id: 1, name: "course1" }])
+      ;(ipcRenderer as any).trigger("is-logged", true, "test", false)
+      ;(ipcRenderer as any).trigger("courses", [{ id: 1, name: "course1" }])
     })
 
     expect(screen.getByTestId("course-list")).toBeInTheDocument()
@@ -120,7 +121,7 @@ describe("App", () => {
     i18next.hasResourceBundle.mockReturnValue(false)
 
     await act(async () => {
-      ;(ipcRenderer as unknown).trigger("language", { lng: "it", bundle: {} })
+      ;(ipcRenderer as any).trigger("language", { lng: "it", bundle: {} })
     })
 
     expect(i18next.addResourceBundle).toHaveBeenCalledWith("it", "client", {})

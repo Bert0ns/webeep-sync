@@ -1,7 +1,8 @@
-/* eslint-disable react/no-multi-comp */
 /**
  * @jest-environment jsdom
  */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react/no-multi-comp */
 import React from "react"
 import { render, screen, fireEvent } from "@testing-library/react"
 import "@testing-library/jest-dom"
@@ -9,12 +10,12 @@ import { NewFilesModal } from "../src/client/views/NewFilesModal"
 
 jest.mock("react-i18next", () => ({
   useTranslation: () => ({
-    t: (key: string, args?: unknown) => `${key} ${args?.count ?? ""}`.trim(),
+    t: (key: string, args?: any) => `${key} ${args?.count ?? ""}`.trim(),
   }),
 }))
 
 jest.mock("../src/client/components/Modal", () => ({
-  Modal: ({ children, onClose, title }: unknown) => (
+  Modal: ({ children, onClose, title }: any) => (
     <div data-testid="modal">
       <h1 data-testid="modal-title">{title}</h1>
       <button data-testid="close-btn" onClick={onClose}>
@@ -26,9 +27,9 @@ jest.mock("../src/client/components/Modal", () => ({
 }))
 
 jest.mock("../src/client/components/NewFilesCourseCollapsable", () => ({
-  NewFilesCourseCollapsable: ({ name, files }: unknown) => (
+  NewFilesCourseCollapsable: ({ name, files }: any) => (
     <div data-testid={`course-${name}`}>
-      {files.map((f: unknown, idx: number) => (
+      {files.map((f: any, idx: number) => (
         <span key={idx}>{f.filename}</span>
       ))}
     </div>
@@ -67,7 +68,7 @@ describe("NewFilesModal", () => {
           updated: false,
         },
       ],
-    } as unknown
+    } as any
 
     render(<NewFilesModal files={mockFiles} onClose={onClose} />)
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 jest.mock("electron", () => ({
   nativeTheme: { themeSource: "system" },
   app: {
@@ -20,10 +21,10 @@ jest.mock("fs/promises", () => ({
 jest.mock("lowdb", () => {
   return {
     Low: class MockLow {
-      data: unknown
+      data: any
       read = jest.fn().mockResolvedValue(undefined)
       write = jest.fn().mockResolvedValue(undefined)
-      constructor(adapter: unknown, defaultData: unknown) {
+      constructor(adapter: any, defaultData: any) {
         this.data = defaultData
       }
     },

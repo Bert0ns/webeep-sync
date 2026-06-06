@@ -1,13 +1,15 @@
 /**
  * @jest-environment jsdom
  */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import React from "react"
 import { render, screen, fireEvent, act } from "@testing-library/react"
 import "@testing-library/jest-dom"
 import { Modal } from "../src/client/components/Modal"
 
 jest.mock("react-icons/io5", () => ({
-  IoClose: ({ onClick, className }: unknown) => (
+  IoClose: ({ onClick, className }: any) => (
     <button data-testid="close-btn" className={className} onClick={onClick}>
       Close
     </button>
@@ -116,7 +118,7 @@ describe("Modal", () => {
       Object.defineProperty(Element.prototype, "scrollTop", originalScrollTop)
     } else {
       // In some jsdom versions it might not exist, though it should
-      delete (Element.prototype as unknown).scrollTop
+      delete (Element.prototype as any).scrollTop
     }
   })
 })

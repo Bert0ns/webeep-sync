@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { MoodleClient } from "../src/modules/moodle"
 import { loginManager } from "../src/modules/login"
 import got from "got"
@@ -10,9 +11,9 @@ jest.mock("got", () => ({
 jest.mock("../src/modules/login", () => {
   const events = require("events")
   const emitter = new events.EventEmitter()
-  ;(emitter as unknown).isLogged = true
-  ;(emitter as unknown).token = "test-token"
-  ;(emitter as unknown).createLoginWindow = jest.fn().mockResolvedValue(true)
+  ;(emitter as any).isLogged = true
+  ;(emitter as any).token = "test-token"
+  ;(emitter as any).createLoginWindow = jest.fn().mockResolvedValue(true)
   return {
     loginManager: emitter,
   }
@@ -52,8 +53,8 @@ describe("MoodleClient", () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(loginManager as unknown).isLogged = true
-    ;(loginManager as unknown).token = "test-token"
+    ;(loginManager as any).isLogged = true
+    ;(loginManager as any).token = "test-token"
     moodleClient = new MoodleClient()
   })
 
@@ -229,7 +230,7 @@ describe("MoodleClient", () => {
   })
 
   it("markNotificationAsRead should update cache and send request", async () => {
-    moodleClient.cachedNotifications = [{ id: 1, read: false } as unknown]
+    moodleClient.cachedNotifications = [{ id: 1, read: false } as any]
     ;(got.post as jest.Mock).mockResolvedValueOnce({
       body: JSON.stringify({ success: true }),
     })
@@ -240,7 +241,7 @@ describe("MoodleClient", () => {
   })
 
   it("markAllNotificationsAsRead should update cache and send request", async () => {
-    moodleClient.cachedNotifications = [{ id: 1, read: false } as unknown]
+    moodleClient.cachedNotifications = [{ id: 1, read: false } as any]
     moodleClient.userid = 123
     ;(got.post as jest.Mock).mockResolvedValueOnce({
       body: JSON.stringify({ success: true }),

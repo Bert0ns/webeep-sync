@@ -1,11 +1,13 @@
 /**
  * @jest-environment jsdom
  */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { renderHook } from "@testing-library/react"
 import useOnOutsideClick from "../src/client/hooks/useOnOutsideClick"
 
 describe("useOnOutsideClick", () => {
-  let ref: unknown
+  let ref: any
   let callback: jest.Mock
   let headbar: HTMLElement
 

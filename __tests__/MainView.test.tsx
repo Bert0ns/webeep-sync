@@ -1,7 +1,8 @@
-/* eslint-disable react/no-multi-comp */
 /**
  * @jest-environment jsdom
  */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react/no-multi-comp */
 import React from "react"
 import { render, screen, fireEvent, act, waitFor } from "@testing-library/react"
 import "@testing-library/jest-dom"
@@ -10,7 +11,7 @@ import { LoginContext } from "../src/client/LoginContext"
 import { ipcRenderer } from "electron"
 
 jest.mock("electron", () => {
-  let listeners: unknown = {}
+  let listeners: any = {}
   return {
     ipcRenderer: {
       invoke: jest.fn().mockResolvedValue(null),
@@ -18,10 +19,10 @@ jest.mock("electron", () => {
         listeners[channel] = cb
       }),
       send: jest.fn(),
-      trigger: (channel: string, ...args: unknown[]) => {
-        if (listeners[channel]) listeners[channel]({} as unknown, ...args)
+      trigger: (channel: string, ...args: any[]) => {
+        if (listeners[channel]) listeners[channel]({} as any, ...args)
       },
-      off: (channel: string, cb: unknown) => {
+      off: (channel: string, cb: any) => {
         delete listeners[channel]
       },
       clear: () => {
@@ -32,14 +33,14 @@ jest.mock("electron", () => {
 })
 
 jest.mock("react-i18next", () => {
-  const listeners: unknown = {}
+  const listeners: any = {}
   const i18n = {
-    getFixedT: () => (key: string, args: unknown) =>
+    getFixedT: () => (key: string, args: any) =>
       `${key} ${args?.count ?? ""}`.trim(),
-    on: (evt: string, cb: unknown) => {
+    on: (evt: string, cb: any) => {
       listeners[evt] = cb
     },
-    off: (evt: string, cb: unknown) => {
+    off: (evt: string, cb: any) => {
       delete listeners[evt]
     },
     trigger: (evt: string) => {
@@ -59,7 +60,7 @@ jest.mock("../src/client/components/NotificationList", () => ({
 }))
 
 jest.mock("react-icons/io5", () => ({
-  IoSettingsSharp: ({ onClick }: unknown) => (
+  IoSettingsSharp: ({ onClick }: any) => (
     <div data-testid="settings-icon" onClick={onClick} />
   ),
   IoWarning: () => <div data-testid="warning-icon" />,
@@ -70,8 +71,8 @@ describe("MainView", () => {
   const onLogin = jest.fn()
   const onSettings = jest.fn()
 
-  const renderWithContext = async (contextVal: unknown) => {
-    let result: unknown
+  const renderWithContext = async (contextVal: any) => {
+    let result: any
     await act(async () => {
       result = render(
         <LoginContext.Provider value={contextVal}>
@@ -86,7 +87,7 @@ describe("MainView", () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(ipcRenderer as unknown).clear()
+    ;(ipcRenderer as any).clear()
   })
 
   afterEach(() => {
@@ -160,7 +161,7 @@ describe("MainView", () => {
 
     // trigger update available
     act(() => {
-      ;(ipcRenderer as unknown).trigger("update-available")
+      ;(ipcRenderer as any).trigger("update-available")
     })
 
     const updateIcon = screen.getByTitle("updateAvailable")
