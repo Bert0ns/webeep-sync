@@ -1,3 +1,4 @@
+/* eslint-disable react/no-multi-comp */
 /**
  * @jest-environment jsdom
  */
@@ -21,7 +22,7 @@ jest.mock("react-i18next", () => ({
 }))
 
 jest.mock("../src/client/components/Checkbox", () => ({
-  Checkbox: ({ value, onChange }: any) => (
+  Checkbox: ({ value, onChange }: unknown) => (
     <input
       type="checkbox"
       data-testid="checkbox"
@@ -32,14 +33,14 @@ jest.mock("../src/client/components/Checkbox", () => ({
 }))
 
 jest.mock("react-icons/io5", () => ({
-  IoClose: ({ onClick }: any) => (
+  IoClose: ({ onClick }: unknown) => (
     <div data-testid="close-icon" onClick={onClick} />
   ),
   IoAddCircleOutline: () => <div />,
   IoCheckmarkCircle: () => <div />,
 }))
 jest.mock("react-icons/hi", () => ({
-  HiCheck: ({ onClick }: any) => (
+  HiCheck: ({ onClick }: unknown) => (
     <div data-testid="check-icon" onClick={onClick} />
   ),
 }))
@@ -58,7 +59,7 @@ describe("CourseRow", () => {
   })
 
   it("renders correctly", () => {
-    render(<CourseRow course={mockCourse as any} index={0} length={1} />)
+    render(<CourseRow course={mockCourse as unknown} index={0} length={1} />)
 
     expect(screen.getByText("Mathematics 101")).toBeInTheDocument()
     const input = screen.getByDisplayValue("math101")
@@ -67,7 +68,7 @@ describe("CourseRow", () => {
   })
 
   it("can toggle shouldSync", () => {
-    render(<CourseRow course={mockCourse as any} index={0} length={1} />)
+    render(<CourseRow course={mockCourse as unknown} index={0} length={1} />)
     const checkbox = screen.getByTestId("checkbox")
 
     fireEvent.click(checkbox)
@@ -75,7 +76,7 @@ describe("CourseRow", () => {
   })
 
   it("handles editing and cancel via escape", () => {
-    render(<CourseRow course={mockCourse as any} index={0} length={1} />)
+    render(<CourseRow course={mockCourse as unknown} index={0} length={1} />)
     const input = screen.getByDisplayValue("math101")
 
     // Focus sets editing mode
@@ -93,7 +94,7 @@ describe("CourseRow", () => {
   })
 
   it("handles editing and confirm via enter", async () => {
-    render(<CourseRow course={mockCourse as any} index={0} length={1} />)
+    render(<CourseRow course={mockCourse as unknown} index={0} length={1} />)
     const input = screen.getByDisplayValue("math101")
 
     fireEvent.focus(input)
@@ -112,7 +113,7 @@ describe("CourseRow", () => {
   })
 
   it("handles invalid input", async () => {
-    render(<CourseRow course={mockCourse as any} index={0} length={1} />)
+    render(<CourseRow course={mockCourse as unknown} index={0} length={1} />)
     const input = screen.getByDisplayValue("math101")
 
     fireEvent.focus(input)
@@ -127,7 +128,7 @@ describe("CourseRow", () => {
   })
 
   it("handles confirm via check icon", async () => {
-    render(<CourseRow course={mockCourse as any} index={0} length={1} />)
+    render(<CourseRow course={mockCourse as unknown} index={0} length={1} />)
     const input = screen.getByDisplayValue("math101")
 
     fireEvent.focus(input)
@@ -148,7 +149,7 @@ describe("CourseRow", () => {
   it("handles error during rename", async () => {
     ;(ipcRenderer.invoke as jest.Mock).mockResolvedValueOnce(false)
 
-    render(<CourseRow course={mockCourse as any} index={0} length={1} />)
+    render(<CourseRow course={mockCourse as unknown} index={0} length={1} />)
     const input = screen.getByDisplayValue("math101")
 
     fireEvent.focus(input)

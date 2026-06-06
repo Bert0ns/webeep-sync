@@ -24,7 +24,7 @@ jest.mock("react-i18next", () => ({
 
 // Mock components
 jest.mock("../src/client/components/CourseRow", () => ({
-  CourseRow: ({ course }: any) => (
+  CourseRow: ({ course }: unknown) => (
     <div data-testid={`course-${course.id}`}>{course.name}</div>
   ),
 }))

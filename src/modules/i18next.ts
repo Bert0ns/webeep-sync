@@ -20,17 +20,24 @@ export function i18nInit(): Promise<void> {
       // Custom backend to load locales without external dependencies
       const customBackend = {
         type: "backend" as const,
-        read: (language: string, namespace: string, callback: (error: any, data: any) => void) => {
-          const filePath = path.join(__static, `/locales/${language}/${namespace}.json`);
+        read: (
+          language: string,
+          namespace: string,
+          callback: (error: unknown, data: unknown) => void,
+        ) => {
+          const filePath = path.join(
+            __static,
+            `/locales/${language}/${namespace}.json`,
+          )
           try {
-            const data = JSON.parse(fs.readFileSync(filePath, "utf-8"));
-            callback(null, data);
+            const data = JSON.parse(fs.readFileSync(filePath, "utf-8"))
+            callback(null, data)
           } catch (e) {
-            callback(e, false);
+            callback(e, false)
           }
-        }
-      };
-      
+        },
+      }
+
       await i18n.use(customBackend).init({
         ns: ["common", "tray", "client", "notifications"],
         defaultNS: "common",

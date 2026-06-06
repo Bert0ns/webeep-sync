@@ -1,3 +1,4 @@
+/* eslint-disable react/no-multi-comp */
 /**
  * @jest-environment jsdom
  */
@@ -17,7 +18,7 @@ jest.mock("electron", () => ({
 }))
 
 jest.mock("../src/client/components/Modal", () => ({
-  Modal: ({ children, title, onClose }: any) => (
+  Modal: ({ children, title, onClose }: unknown) => (
     <div data-testid="modal">
       <h2>{title}</h2>
       <button onClick={onClose}>Close</button>
@@ -27,7 +28,11 @@ jest.mock("../src/client/components/Modal", () => ({
 }))
 
 jest.mock("../src/client/components/Link", () => ({
-  Link: ({ children, href }: any) => <a href={href} data-testid="link">{children}</a>,
+  Link: ({ children, href }: unknown) => (
+    <a href={href} data-testid="link">
+      {children}
+    </a>
+  ),
 }))
 
 describe("NotificationInfo", () => {
@@ -59,10 +64,10 @@ describe("NotificationInfo", () => {
     await act(async () => {
       render(
         <NotificationInfo
-          notification={mockNotification as any}
+          notification={mockNotification as unknown}
           toBeOpened={false}
           onShow={onShow}
-        />
+        />,
       )
     })
 
@@ -76,7 +81,7 @@ describe("NotificationInfo", () => {
     expect(ipcRenderer.invoke).toHaveBeenCalledWith("mark-notification-read", 1)
     expect(onShow).toHaveBeenCalled()
     expect(screen.getByTestId("modal")).toBeInTheDocument()
-    
+
     // check link click
     const link = document.querySelector(".content a")
     await act(async () => {
@@ -103,9 +108,9 @@ describe("NotificationInfo", () => {
     await act(async () => {
       render(
         <NotificationInfo
-          notification={notification as any}
+          notification={notification as unknown}
           toBeOpened={true}
-        />
+        />,
       )
     })
 

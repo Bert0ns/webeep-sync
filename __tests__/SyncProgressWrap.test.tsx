@@ -1,3 +1,4 @@
+/* eslint-disable react/no-multi-comp */
 /**
  * @jest-environment jsdom
  */
@@ -18,7 +19,7 @@ jest.mock("../src/util", () => ({
 }))
 
 jest.mock("../src/client/components/ProgressBar", () => ({
-  PrograssBar: ({ progress }: any) => (
+  PrograssBar: ({ progress }: unknown) => (
     <div data-testid="progress-bar">{progress}</div>
   ),
 }))
@@ -42,7 +43,7 @@ describe("SyncProgressWrap", () => {
   }
 
   it("renders progress bars correctly with single file", () => {
-    render(<SyncProgressWrap progress={mockProgress as any} />)
+    render(<SyncProgressWrap progress={mockProgress as unknown} />)
 
     expect(screen.queryByTestId("sync-progress-list")).not.toBeInTheDocument()
 
@@ -66,7 +67,7 @@ describe("SyncProgressWrap", () => {
       ],
     }
 
-    render(<SyncProgressWrap progress={multiFilesProgress as any} />)
+    render(<SyncProgressWrap progress={multiFilesProgress as unknown} />)
     expect(screen.getByTestId("sync-progress-list")).toBeInTheDocument()
   })
 })

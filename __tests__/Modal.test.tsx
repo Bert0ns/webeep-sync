@@ -7,7 +7,7 @@ import "@testing-library/jest-dom"
 import { Modal } from "../src/client/components/Modal"
 
 jest.mock("react-icons/io5", () => ({
-  IoClose: ({ onClick, className }: any) => (
+  IoClose: ({ onClick, className }: unknown) => (
     <button data-testid="close-btn" className={className} onClick={onClick}>
       Close
     </button>
@@ -116,7 +116,7 @@ describe("Modal", () => {
       Object.defineProperty(Element.prototype, "scrollTop", originalScrollTop)
     } else {
       // In some jsdom versions it might not exist, though it should
-      delete (Element.prototype as any).scrollTop
+      delete (Element.prototype as unknown).scrollTop
     }
   })
 })

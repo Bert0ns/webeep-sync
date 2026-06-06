@@ -1,5 +1,5 @@
-import { createWindow, send, focus, mainWindow } from "../src/modules/window"
-import { app, BrowserWindow, nativeImage } from "electron"
+import { createWindow, send, focus } from "../src/modules/window"
+import { app, BrowserWindow } from "electron"
 
 jest.mock("electron", () => {
   const mBrowserWindow = {
@@ -21,7 +21,9 @@ jest.mock("electron", () => {
     nativeImage: {
       createFromPath: jest.fn().mockReturnValue("mock-image"),
     },
-    BrowserWindow: jest.fn().mockImplementation(() => mBrowserWindow) as any,
+    BrowserWindow: jest
+      .fn()
+      .mockImplementation(() => mBrowserWindow) as unknown,
   }
 })
 
@@ -32,7 +34,7 @@ jest.mock("../src/modules/logger", () => ({
 describe("window module", () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(BrowserWindow.getAllWindows as any) = jest.fn().mockReturnValue([])
+    ;(BrowserWindow.getAllWindows as unknown) = jest.fn().mockReturnValue([])
   })
 
   describe("createWindow", () => {
@@ -64,7 +66,7 @@ describe("window module", () => {
 
     it("should send message via webContents", async () => {
       const mBrowserWindow = {
-        on: (event: string, cb: any) => {
+        on: (event: string, cb: unknown) => {
           if (event === "ready-to-show") cb()
         },
         show: jest.fn(),
@@ -99,7 +101,7 @@ describe("window module", () => {
         show: jest.fn(),
         loadURL: jest.fn(),
       }))
-      ;(BrowserWindow.getAllWindows as any).mockReturnValue([])
+      ;(BrowserWindow.getAllWindows as unknown).mockReturnValue([])
 
       await focus()
       expect(BrowserWindow).toHaveBeenCalled()
@@ -108,12 +110,14 @@ describe("window module", () => {
     it("should focus existing window", async () => {
       const mockFocus = jest.fn()
       const mBrowserWindow = {
-        on: (event: string, cb: any) => {
+        on: (event: string, cb: unknown) => {
           if (event === "focus") cb()
         },
         focus: mockFocus,
       }
-      ;(BrowserWindow.getAllWindows as any).mockReturnValue([mBrowserWindow])
+      ;(BrowserWindow.getAllWindows as unknown).mockReturnValue([
+        mBrowserWindow,
+      ])
 
       await focus()
       expect(mockFocus).toHaveBeenCalled()

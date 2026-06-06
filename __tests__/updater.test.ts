@@ -3,12 +3,12 @@ import {
   checkForUpdates,
   isUpdateAvailable,
 } from "../src/modules/updater"
-import { app, autoUpdater, ipcMain } from "electron"
-import { storeIsReady, store } from "../src/modules/store"
+import { autoUpdater, ipcMain } from "electron"
+import { storeIsReady } from "../src/modules/store"
 
 jest.mock("electron", () => {
-  let listeners: any = {}
-  let ipcListeners: any = {}
+  const listeners: unknown = {}
+  const ipcListeners: unknown = {}
   return {
     app: {
       getVersion: jest.fn().mockReturnValue("1.0.0"),
@@ -20,7 +20,7 @@ jest.mock("electron", () => {
       }),
       checkForUpdates: jest.fn(),
       quitAndInstall: jest.fn(),
-      trigger: (event: string, ...args: any[]) => {
+      trigger: (event: string, ...args: unknown[]) => {
         if (listeners[event]) listeners[event](...args)
       },
     },
@@ -28,7 +28,7 @@ jest.mock("electron", () => {
       handle: jest.fn((channel, cb) => {
         ipcListeners[channel] = cb
       }),
-      trigger: (channel: string, ...args: any[]) => {
+      trigger: (channel: string, ...args: unknown[]) => {
         if (ipcListeners[channel]) ipcListeners[channel](...args)
       },
     },
@@ -110,7 +110,7 @@ describe("updater module", () => {
   it("handles update-downloaded event", () => {
     setupUpdater()
     expect(isUpdateAvailable()).toBe(false)
-    ;(autoUpdater as any).trigger("update-downloaded")
+    ;(autoUpdater as unknown).trigger("update-downloaded")
 
     expect(isUpdateAvailable()).toBe(true)
 
@@ -120,7 +120,7 @@ describe("updater module", () => {
 
   it("handles quit-and-install IPC event", () => {
     setupUpdater()
-    ;(ipcMain as any).trigger("quit-and-install")
+    ;(ipcMain as unknown).trigger("quit-and-install")
     expect(autoUpdater.quitAndInstall).toHaveBeenCalled()
   })
 

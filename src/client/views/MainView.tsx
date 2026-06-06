@@ -42,8 +42,9 @@ export const MainView: FC<{
     const interval = setInterval(() => updateTime(), 60000)
     const onLanguageChanged = () => updateTime()
     const onSyncing = () => updateTime()
-    const onNewUpdate = (e: any, update: any) => setUpdateAvailable(update)
-    const onUpdateAvailable = (e: any) => setUpdateAvailable(true)
+    const onNewUpdate = (e: unknown, update: unknown) =>
+      setUpdateAvailable(update)
+    const onUpdateAvailable = (e: unknown) => setUpdateAvailable(true)
 
     i18n.on("languageChanged", onLanguageChanged)
     ipcRenderer.on("syncing", onSyncing)

@@ -1,20 +1,20 @@
-import { MoodleClient, EXCLUDED_MODNAMES } from "../src/modules/moodle"
+import { MoodleClient } from "../src/modules/moodle"
 import { loginManager } from "../src/modules/login"
 import got from "got"
-import { store, storeIsReady } from "../src/modules/store"
+import { store } from "../src/modules/store"
 
 jest.mock("got", () => ({
-  post: jest.fn()
+  post: jest.fn(),
 }))
 
 jest.mock("../src/modules/login", () => {
   const events = require("events")
   const emitter = new events.EventEmitter()
-  ;(emitter as any).isLogged = true
-  ;(emitter as any).token = "test-token"
-  ;(emitter as any).createLoginWindow = jest.fn().mockResolvedValue(true)
+  ;(emitter as unknown).isLogged = true
+  ;(emitter as unknown).token = "test-token"
+  ;(emitter as unknown).createLoginWindow = jest.fn().mockResolvedValue(true)
   return {
-    loginManager: emitter
+    loginManager: emitter,
   }
 })
 
@@ -23,19 +23,19 @@ jest.mock("../src/modules/store", () => ({
     data: {
       settings: {
         syncNewCourses: true,
-        downloadPath: "/downloads"
+        downloadPath: "/downloads",
       },
       persistence: {
-        courses: {}
-      }
+        courses: {},
+      },
     },
-    write: jest.fn()
+    write: jest.fn(),
   },
-  storeIsReady: jest.fn().mockResolvedValue(true)
+  storeIsReady: jest.fn().mockResolvedValue(true),
 }))
 
 jest.mock("../src/modules/logger", () => ({
-  createLogger: () => ({ log: jest.fn(), debug: jest.fn() })
+  createLogger: () => ({ log: jest.fn(), debug: jest.fn() }),
 }))
 
 // Timer mocks to prevent setInterval from running indefinitely
@@ -52,14 +52,14 @@ describe("MoodleClient", () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(loginManager as any).isLogged = true
-    ;(loginManager as any).token = "test-token"
+    ;(loginManager as unknown).isLogged = true
+    ;(loginManager as unknown).token = "test-token"
     moodleClient = new MoodleClient()
   })
 
   it("should initialize and fetch user ID correctly", async () => {
     ;(got.post as jest.Mock).mockResolvedValueOnce({
-      body: JSON.stringify({ userid: 123, fullname: "Test User" })
+      body: JSON.stringify({ userid: 123, fullname: "Test User" }),
     })
 
     const usernameHandler = jest.fn()
@@ -76,12 +76,14 @@ describe("MoodleClient", () => {
   it("should handle call network error with catchNetworkError = false", async () => {
     ;(got.post as jest.Mock).mockRejectedValueOnce(new Error("Network Error"))
 
-    await expect(moodleClient.call("test_function", {}, false)).rejects.toThrow("Network Error")
+    await expect(moodleClient.call("test_function", {}, false)).rejects.toThrow(
+      "Network Error",
+    )
     expect(moodleClient.connected).toBe(false)
   })
 
   it("should retry call on network error if catchNetworkError = true", async () => {
-    let callCount = 0;
+    let callCount = 0
     ;(got.post as jest.Mock).mockImplementation(() => {
       callCount++
       if (callCount === 1) return Promise.reject(new Error("Network Error"))
@@ -89,21 +91,24 @@ describe("MoodleClient", () => {
     })
 
     const promise = moodleClient.call("test_function", {}, true)
-    
+
     // Advance timers for setTimeout in retry
     await Promise.resolve() // let rejection happen
     jest.advanceTimersByTime(2000)
-    
+
     const result = await promise
     expect(result).toEqual({ success: true })
     expect(moodleClient.connected).toBe(true)
   })
 
   it("should request new token if invalidtoken", async () => {
-    let callCount = 0;
+    let callCount = 0
     ;(got.post as jest.Mock).mockImplementation(() => {
       callCount++
-      if (callCount === 1) return Promise.resolve({ body: JSON.stringify({ errorcode: "invalidtoken" }) })
+      if (callCount === 1)
+        return Promise.resolve({
+          body: JSON.stringify({ errorcode: "invalidtoken" }),
+        })
       return Promise.resolve({ body: JSON.stringify({ success: true }) })
     })
 
@@ -114,12 +119,11 @@ describe("MoodleClient", () => {
 
   it("getCoursesWithoutCache should return formatted courses", async () => {
     moodleClient.userid = 123
-    
     ;(got.post as jest.Mock).mockResolvedValueOnce({
       body: JSON.stringify([
         { id: 1, fullname: "2023 - Intro to CS (Course)" },
-        { id: 2, fullname: "Just Another Course" }
-      ])
+        { id: 2, fullname: "Just Another Course" },
+      ]),
     })
 
     const courses = await moodleClient.getCoursesWithoutCache()
@@ -149,33 +153,43 @@ describe("MoodleClient", () => {
                 filesize: 100,
                 fileurl: "http://example.com/doc.pdf",
                 timecreated: 1,
-                timemodified: 2
-              }
-            ]
+                timemodified: 2,
+              },
+            ],
           },
           {
             id: 2,
             name: "Forum Link",
             modname: "forum", // Should be ignored (EXCLUDED_MODNAMES)
-            contents: []
-          }
-        ]
-      }
+            contents: [],
+          },
+        ],
+      },
     ]
 
     ;(got.post as jest.Mock).mockResolvedValueOnce({
-      body: JSON.stringify(mockContents)
+      body: JSON.stringify(mockContents),
     })
 
-    const course = { id: 1, fullname: "Test", name: "TestCourse", shouldSync: true }
+    const course = {
+      id: 1,
+      fullname: "Test",
+      name: "TestCourse",
+      shouldSync: true,
+    }
     const files = await moodleClient.getFileInfos(course)
-    
+
     expect(files).toHaveLength(1)
     expect(files[0].coursename).toBe("TestCourse")
     expect(files[0].filename).toBe("Resource 1.pdf") // since modname resource and 1 file
-    expect(got.post).toHaveBeenCalledWith(expect.any(String), expect.objectContaining({
-      form: expect.objectContaining({ wsfunction: "core_course_get_contents" })
-    }))
+    expect(got.post).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({
+        form: expect.objectContaining({
+          wsfunction: "core_course_get_contents",
+        }),
+      }),
+    )
   })
 
   it("getNotifications should return and filter notifications", async () => {
@@ -189,7 +203,7 @@ describe("MoodleClient", () => {
           timecreated: 123,
           read: false,
           eventtype: "posts",
-          customdata: JSON.stringify({ courseid: 5 })
+          customdata: JSON.stringify({ courseid: 5 }),
         },
         {
           id: 2,
@@ -199,13 +213,13 @@ describe("MoodleClient", () => {
           timecreated: 123,
           read: false,
           eventtype: "other", // Should be filtered
-          customdata: ""
-        }
-      ]
+          customdata: "",
+        },
+      ],
     }
 
     ;(got.post as jest.Mock).mockResolvedValueOnce({
-      body: JSON.stringify(mockNots)
+      body: JSON.stringify(mockNots),
     })
 
     const nots = await moodleClient.getNotifications()
@@ -215,10 +229,9 @@ describe("MoodleClient", () => {
   })
 
   it("markNotificationAsRead should update cache and send request", async () => {
-    moodleClient.cachedNotifications = [{ id: 1, read: false } as any]
-    
+    moodleClient.cachedNotifications = [{ id: 1, read: false } as unknown]
     ;(got.post as jest.Mock).mockResolvedValueOnce({
-      body: JSON.stringify({ success: true })
+      body: JSON.stringify({ success: true }),
     })
 
     await moodleClient.markNotificationAsRead(1)
@@ -227,17 +240,22 @@ describe("MoodleClient", () => {
   })
 
   it("markAllNotificationsAsRead should update cache and send request", async () => {
-    moodleClient.cachedNotifications = [{ id: 1, read: false } as any]
+    moodleClient.cachedNotifications = [{ id: 1, read: false } as unknown]
     moodleClient.userid = 123
-    
     ;(got.post as jest.Mock).mockResolvedValueOnce({
-      body: JSON.stringify({ success: true })
+      body: JSON.stringify({ success: true }),
     })
 
     await moodleClient.markAllNotificationsAsRead()
     expect(moodleClient.cachedNotifications[0].read).toBe(true)
-    expect(got.post).toHaveBeenCalledWith(expect.any(String), expect.objectContaining({
-      form: expect.objectContaining({ wsfunction: "core_message_mark_all_notifications_as_read", useridto: 123 })
-    }))
+    expect(got.post).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({
+        form: expect.objectContaining({
+          wsfunction: "core_message_mark_all_notifications_as_read",
+          useridto: 123,
+        }),
+      }),
+    )
   })
 })

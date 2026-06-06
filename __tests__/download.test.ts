@@ -1,44 +1,42 @@
 import { DownloadManager } from "../src/modules/download"
-import { store, storeIsReady } from "../src/modules/store"
-import { loginManager } from "../src/modules/login"
-import { moodleClient } from "../src/modules/moodle"
-import { DownloadState, SyncResult } from "../src/util"
+import { store } from "../src/modules/store"
+import { SyncResult } from "../src/util"
 import fs from "fs/promises"
 
 jest.mock("fs", () => ({
-  createWriteStream: jest.fn().mockReturnValue({})
+  createWriteStream: jest.fn().mockReturnValue({}),
 }))
 
 jest.mock("fs/promises", () => ({
   mkdir: jest.fn().mockResolvedValue(undefined),
   utimes: jest.fn().mockResolvedValue(undefined),
   stat: jest.fn().mockResolvedValue({ mtime: new Date(1000), size: 100 }),
-  rm: jest.fn().mockResolvedValue(undefined)
+  rm: jest.fn().mockResolvedValue(undefined),
 }))
 
 jest.mock("stream/promises", () => ({
-  pipeline: jest.fn().mockResolvedValue(undefined)
+  pipeline: jest.fn().mockResolvedValue(undefined),
 }))
 
 jest.mock("got", () => {
   const HTTPError = class extends Error {
-    response: any;
-    constructor(resp: any) {
-      super();
-      this.name = "HTTPError";
-      this.response = resp;
+    response: unknown
+    constructor(resp: unknown) {
+      super()
+      this.name = "HTTPError"
+      this.response = resp
     }
   }
   return {
     stream: jest.fn().mockReturnValue({
-      on: jest.fn()
+      on: jest.fn(),
     }),
-    HTTPError
+    HTTPError,
   }
 })
 
 jest.mock("../src/modules/logger", () => ({
-  createLogger: () => ({ log: jest.fn(), error: jest.fn(), debug: jest.fn() })
+  createLogger: () => ({ log: jest.fn(), error: jest.fn(), debug: jest.fn() }),
 }))
 
 jest.mock("../src/modules/store", () => ({
@@ -48,37 +46,46 @@ jest.mock("../src/modules/store", () => ({
         autosyncEnabled: false,
         autosyncInterval: 60000,
         downloadPath: "/downloads",
-        maxConcurrentDownloads: 1
+        maxConcurrentDownloads: 1,
       },
       persistence: {
         lastSynced: 0,
         courses: {
           1: { shouldSync: true },
-          2: { shouldSync: false }
-        }
-      }
+          2: { shouldSync: false },
+        },
+      },
     },
-    write: jest.fn()
+    write: jest.fn(),
   },
-  storeIsReady: jest.fn().mockResolvedValue(true)
+  storeIsReady: jest.fn().mockResolvedValue(true),
 }))
 
 jest.mock("../src/modules/login", () => ({
   loginManager: {
-    token: "test-token"
-  }
+    token: "test-token",
+  },
 }))
 
 jest.mock("../src/modules/moodle", () => ({
   moodleClient: {
     getCoursesWithoutCache: jest.fn().mockResolvedValue([
       { id: 1, name: "Course 1", shouldSync: true },
-      { id: 2, name: "Course 2", shouldSync: false }
+      { id: 2, name: "Course 2", shouldSync: false },
     ]),
-    getFileInfos: jest.fn().mockImplementation(() => Promise.resolve([
-      { coursename: "Course 1", filename: "test.pdf", filepath: "/", filesize: 200, fileurl: "http://test.pdf", timemodified: 2 }
-    ]))
-  }
+    getFileInfos: jest.fn().mockImplementation(() =>
+      Promise.resolve([
+        {
+          coursename: "Course 1",
+          filename: "test.pdf",
+          filepath: "/",
+          filesize: 200,
+          fileurl: "http://test.pdf",
+          timemodified: 2,
+        },
+      ]),
+    ),
+  },
 }))
 
 beforeAll(() => {
@@ -128,9 +135,11 @@ describe("DownloadManager", () => {
 
   it("stop should cancel requests and set stopped to true", () => {
     const cancelMock = jest.fn()
-    downloadManager.currentDownloads = [{ cancel: cancelMock, progress: {} as any }]
+    downloadManager.currentDownloads = [
+      { cancel: cancelMock, progress: {} as unknown },
+    ]
     downloadManager.stop()
-    expect((downloadManager as any).stopped).toBe(true)
+    expect((downloadManager as unknown).stopped).toBe(true)
     expect(cancelMock).toHaveBeenCalled()
   })
 

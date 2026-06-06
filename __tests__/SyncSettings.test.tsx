@@ -8,7 +8,7 @@ import { SyncSettings } from "../src/client/views/SyncSettings"
 import { ipcRenderer, shell } from "electron"
 
 jest.mock("electron", () => {
-  let listeners: any = {}
+  let listeners: unknown = {}
   return {
     ipcRenderer: {
       on: jest.fn((channel, cb) => {
@@ -16,8 +16,8 @@ jest.mock("electron", () => {
       }),
       send: jest.fn(),
       // helper to trigger events in test
-      trigger: (channel: string, ...args: any[]) => {
-        if (listeners[channel]) listeners[channel]({} as any, ...args)
+      trigger: (channel: string, ...args: unknown[]) => {
+        if (listeners[channel]) listeners[channel]({} as unknown, ...args)
       },
       clear: () => {
         listeners = {}
@@ -36,7 +36,7 @@ jest.mock("react-i18next", () => ({
 }))
 
 jest.mock("../src/client/components/Switch", () => ({
-  Switch: ({ onChange, checked }: any) => (
+  Switch: ({ onChange, checked }: unknown) => (
     <input
       type="checkbox"
       data-testid="switch"
@@ -53,7 +53,7 @@ jest.mock("../src/util", () => ({
 describe("SyncSettings", () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(ipcRenderer as any).clear()
+    ;(ipcRenderer as unknown).clear()
   })
 
   it("renders correctly and fetches initial state", () => {
@@ -65,7 +65,7 @@ describe("SyncSettings", () => {
     render(<SyncSettings />)
 
     act(() => {
-      ;(ipcRenderer as any).trigger("download-path", "/my/mock/path")
+      ;(ipcRenderer as unknown).trigger("download-path", "/my/mock/path")
     })
 
     expect(screen.getByText("/my/mock/path")).toBeInTheDocument()
@@ -85,8 +85,8 @@ describe("SyncSettings", () => {
     render(<SyncSettings />)
 
     act(() => {
-      ;(ipcRenderer as any).trigger("autosync", true)
-      ;(ipcRenderer as any).trigger("autosync-interval", 7200000) // 2 hours
+      ;(ipcRenderer as unknown).trigger("autosync", true)
+      ;(ipcRenderer as unknown).trigger("autosync-interval", 7200000) // 2 hours
     })
 
     const switchEl = screen.getByTestId("switch")
@@ -100,7 +100,7 @@ describe("SyncSettings", () => {
     render(<SyncSettings />)
 
     act(() => {
-      ;(ipcRenderer as any).trigger("autosync", true)
+      ;(ipcRenderer as unknown).trigger("autosync", true)
     })
 
     const switchEl = screen.getByTestId("switch")

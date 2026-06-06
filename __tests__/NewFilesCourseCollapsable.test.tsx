@@ -47,7 +47,10 @@ describe("NewFilesCourseCollapsable", () => {
 
   it("renders open by default with file list", () => {
     render(
-      <NewFilesCourseCollapsable name="Math 101" files={mockFiles as any} />,
+      <NewFilesCourseCollapsable
+        name="Math 101"
+        files={mockFiles as unknown}
+      />,
     )
 
     expect(screen.getByText("Math 101 (2)")).toBeInTheDocument()
@@ -59,7 +62,10 @@ describe("NewFilesCourseCollapsable", () => {
 
   it("toggles file list on click", () => {
     render(
-      <NewFilesCourseCollapsable name="Math 101" files={mockFiles as any} />,
+      <NewFilesCourseCollapsable
+        name="Math 101"
+        files={mockFiles as unknown}
+      />,
     )
 
     // Initially files are shown
@@ -81,7 +87,7 @@ describe("NewFilesCourseCollapsable", () => {
     render(
       <NewFilesCourseCollapsable
         name="Math 101"
-        files={[mockFiles[0]] as any}
+        files={[mockFiles[0]] as unknown}
       />,
     )
 

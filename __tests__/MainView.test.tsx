@@ -1,3 +1,4 @@
+/* eslint-disable react/no-multi-comp */
 /**
  * @jest-environment jsdom
  */
@@ -9,7 +10,7 @@ import { LoginContext } from "../src/client/LoginContext"
 import { ipcRenderer } from "electron"
 
 jest.mock("electron", () => {
-  let listeners: any = {}
+  let listeners: unknown = {}
   return {
     ipcRenderer: {
       invoke: jest.fn().mockResolvedValue(null),
@@ -17,10 +18,10 @@ jest.mock("electron", () => {
         listeners[channel] = cb
       }),
       send: jest.fn(),
-      trigger: (channel: string, ...args: any[]) => {
-        if (listeners[channel]) listeners[channel]({} as any, ...args)
+      trigger: (channel: string, ...args: unknown[]) => {
+        if (listeners[channel]) listeners[channel]({} as unknown, ...args)
       },
-      off: (channel: string, cb: any) => {
+      off: (channel: string, cb: unknown) => {
         delete listeners[channel]
       },
       clear: () => {
@@ -31,14 +32,14 @@ jest.mock("electron", () => {
 })
 
 jest.mock("react-i18next", () => {
-  const listeners: any = {}
+  const listeners: unknown = {}
   const i18n = {
-    getFixedT: () => (key: string, args: any) =>
+    getFixedT: () => (key: string, args: unknown) =>
       `${key} ${args?.count ?? ""}`.trim(),
-    on: (evt: string, cb: any) => {
+    on: (evt: string, cb: unknown) => {
       listeners[evt] = cb
     },
-    off: (evt: string, cb: any) => {
+    off: (evt: string, cb: unknown) => {
       delete listeners[evt]
     },
     trigger: (evt: string) => {
@@ -58,7 +59,7 @@ jest.mock("../src/client/components/NotificationList", () => ({
 }))
 
 jest.mock("react-icons/io5", () => ({
-  IoSettingsSharp: ({ onClick }: any) => (
+  IoSettingsSharp: ({ onClick }: unknown) => (
     <div data-testid="settings-icon" onClick={onClick} />
   ),
   IoWarning: () => <div data-testid="warning-icon" />,
@@ -69,8 +70,8 @@ describe("MainView", () => {
   const onLogin = jest.fn()
   const onSettings = jest.fn()
 
-  const renderWithContext = async (contextVal: any) => {
-    let result: any
+  const renderWithContext = async (contextVal: unknown) => {
+    let result: unknown
     await act(async () => {
       result = render(
         <LoginContext.Provider value={contextVal}>
@@ -85,7 +86,7 @@ describe("MainView", () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(ipcRenderer as any).clear()
+    ;(ipcRenderer as unknown).clear()
   })
 
   afterEach(() => {
@@ -159,7 +160,7 @@ describe("MainView", () => {
 
     // trigger update available
     act(() => {
-      ;(ipcRenderer as any).trigger("update-available")
+      ;(ipcRenderer as unknown).trigger("update-available")
     })
 
     const updateIcon = screen.getByTitle("updateAvailable")

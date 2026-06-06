@@ -1,19 +1,16 @@
 import { setupIpc } from "../src/modules/ipc"
-import { ipcMain, BrowserWindow, dialog, nativeTheme, app } from "electron"
+import { ipcMain, BrowserWindow, dialog } from "electron"
 import { loginManager } from "../src/modules/login"
 import { moodleClient } from "../src/modules/moodle"
-import { store, storeIsReady } from "../src/modules/store"
+import { store } from "../src/modules/store"
 import { downloadManager } from "../src/modules/download"
 import { i18n } from "../src/modules/i18next"
-import { tray, setupTray, updateTrayContext } from "../src/modules/tray"
-import * as notifications from "../src/modules/notifications"
-import * as updater from "../src/modules/updater"
-import * as lifecycle from "../src/modules/lifecycle"
+import { tray } from "../src/modules/tray"
 import fs from "fs/promises"
 
 jest.mock("electron", () => {
-  const handlers: any = {}
-  const listeners: any = {}
+  const handlers: unknown = {}
+  const listeners: unknown = {}
   return {
     ipcMain: {
       handle: jest.fn((channel, handler) => {
@@ -22,12 +19,12 @@ jest.mock("electron", () => {
       on: jest.fn((channel, listener) => {
         listeners[channel] = listener
       }),
-      _triggerHandle: (channel: string, event: any, ...args: any[]) => {
+      _triggerHandle: (channel: string, event: unknown, ...args: unknown[]) => {
         if (handlers[channel]) return handlers[channel](event, ...args)
       },
-      _triggerOn: (channel: string, event: any, ...args: any[]) => {
+      _triggerOn: (channel: string, event: unknown, ...args: unknown[]) => {
         if (listeners[channel]) listeners[channel](event, ...args)
-      }
+      },
     },
     BrowserWindow: {
       getFocusedWindow: jest.fn().mockReturnValue({
@@ -36,34 +33,36 @@ jest.mock("electron", () => {
         maximize: jest.fn(),
         unmaximize: jest.fn(),
         close: jest.fn(),
-      })
+      }),
     },
     dialog: {
-      showOpenDialog: jest.fn().mockResolvedValue({ canceled: false, filePaths: ["/new/path"] })
+      showOpenDialog: jest
+        .fn()
+        .mockResolvedValue({ canceled: false, filePaths: ["/new/path"] }),
     },
     nativeTheme: {
-      themeSource: "system"
+      themeSource: "system",
     },
     app: {
-      getVersion: jest.fn().mockReturnValue("1.0.0")
-    }
+      getVersion: jest.fn().mockReturnValue("1.0.0"),
+    },
   }
 })
 
 jest.mock("fs/promises", () => ({
-  rename: jest.fn().mockResolvedValue(undefined)
+  rename: jest.fn().mockResolvedValue(undefined),
 }))
 
 jest.mock("../src/modules/logger", () => ({
-  createLogger: () => ({ debug: jest.fn(), error: jest.fn() })
+  createLogger: () => ({ debug: jest.fn(), error: jest.fn() }),
 }))
 
 jest.mock("../src/modules/login", () => ({
   loginManager: {
     isLogged: true,
     logout: jest.fn(),
-    createLoginWindow: jest.fn()
-  }
+    createLoginWindow: jest.fn(),
+  },
 }))
 
 jest.mock("../src/modules/moodle", () => ({
@@ -72,14 +71,14 @@ jest.mock("../src/modules/moodle", () => ({
     connected: true,
     cachedCourses: [
       { id: 1, name: "Course 1", shouldSync: true },
-      { id: 2, name: "Course 2", shouldSync: false }
+      { id: 2, name: "Course 2", shouldSync: false },
     ],
     cachedNotifications: [],
     getCourses: jest.fn().mockReturnValue([]),
     getNotifications: jest.fn().mockResolvedValue([]),
     markNotificationAsRead: jest.fn(),
-    markAllNotificationsAsRead: jest.fn()
-  }
+    markAllNotificationsAsRead: jest.fn(),
+  },
 }))
 
 jest.mock("../src/modules/store", () => ({
@@ -94,19 +93,19 @@ jest.mock("../src/modules/store", () => ({
         keepOpenInBackground: true,
         trayIcon: true,
         openAtLogin: true,
-        nativeThemeSource: "system"
+        nativeThemeSource: "system",
       },
       persistence: {
         lastSynced: 123456,
         courses: {
           1: { name: "Course 1", shouldSync: true },
-          2: { name: "Course 2", shouldSync: false }
-        }
-      }
+          2: { name: "Course 2", shouldSync: false },
+        },
+      },
     },
-    write: jest.fn().mockResolvedValue(undefined)
+    write: jest.fn().mockResolvedValue(undefined),
   },
-  storeIsReady: jest.fn().mockResolvedValue(true)
+  storeIsReady: jest.fn().mockResolvedValue(true),
 }))
 
 jest.mock("../src/modules/download", () => ({
@@ -114,38 +113,38 @@ jest.mock("../src/modules/download", () => ({
     syncing: false,
     sync: jest.fn(),
     stop: jest.fn(),
-    setAutosync: jest.fn()
-  }
+    setAutosync: jest.fn(),
+  },
 }))
 
 jest.mock("../src/modules/tray", () => ({
   tray: {
     destroy: jest.fn(),
-    isDestroyed: jest.fn().mockReturnValue(false)
+    isDestroyed: jest.fn().mockReturnValue(false),
   },
   setupTray: jest.fn(),
-  updateTrayContext: jest.fn()
+  updateTrayContext: jest.fn(),
 }))
 
 jest.mock("../src/modules/i18next", () => ({
   i18n: {
     language: "en",
     getResourceBundle: jest.fn().mockReturnValue({}),
-    changeLanguage: jest.fn()
-  }
+    changeLanguage: jest.fn(),
+  },
 }))
 
 jest.mock("../src/modules/notifications", () => ({
   getSyncedItems: jest.fn().mockReturnValue([]),
-  getNotificationToBeOpened: jest.fn().mockReturnValue(null)
+  getNotificationToBeOpened: jest.fn().mockReturnValue(null),
 }))
 
 jest.mock("../src/modules/updater", () => ({
-  isUpdateAvailable: jest.fn().mockReturnValue(true)
+  isUpdateAvailable: jest.fn().mockReturnValue(true),
 }))
 
 jest.mock("../src/modules/lifecycle", () => ({
-  setLoginItem: jest.fn()
+  setLoginItem: jest.fn(),
 }))
 
 describe("ipc module", () => {
@@ -154,8 +153,22 @@ describe("ipc module", () => {
     setupIpc()
   })
 
-  const triggerHandle = (channel: string, ...args: any[]) => (ipcMain as any)._triggerHandle(channel, { sender: { send: jest.fn() } }, ...args)
-  const triggerOn = (channel: string, replyMock?: any, ...args: any[]) => (ipcMain as any)._triggerOn(channel, { reply: replyMock, sender: { send: replyMock } }, ...args)
+  const triggerHandle = (channel: string, ...args: unknown[]) =>
+    (ipcMain as unknown)._triggerHandle(
+      channel,
+      { sender: { send: jest.fn() } },
+      ...args,
+    )
+  const triggerOn = (
+    channel: string,
+    replyMock?: unknown,
+    ...args: unknown[]
+  ) =>
+    (ipcMain as unknown)._triggerOn(
+      channel,
+      { reply: replyMock, sender: { send: replyMock } },
+      ...args,
+    )
 
   it("should handle window-control", () => {
     const win = BrowserWindow.getFocusedWindow()
@@ -213,7 +226,11 @@ describe("ipc module", () => {
   })
 
   it("should handle set-settings", async () => {
-    await triggerHandle("set-settings", { maxConcurrentDownloads: -1, language: "it", keepOpenInBackground: false })
+    await triggerHandle("set-settings", {
+      maxConcurrentDownloads: -1,
+      language: "it",
+      keepOpenInBackground: false,
+    })
     expect(store.data.settings.maxConcurrentDownloads).toBe(1)
     expect(tray.destroy).toHaveBeenCalled()
     expect(i18n.changeLanguage).toHaveBeenCalledWith("it")
@@ -221,7 +238,7 @@ describe("ipc module", () => {
   })
 
   it("should handle rename-course successfully", async () => {
-    const send = jest.fn()
+    const _send = jest.fn()
     const result = await triggerHandle("rename-course", 1, "New Course 1")
     expect(fs.rename).toHaveBeenCalled()
     expect(result).toBe(true)

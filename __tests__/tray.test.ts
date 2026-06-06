@@ -1,9 +1,8 @@
 import { tray, setupTray, updateTrayContext } from "../src/modules/tray"
 import { Tray, Menu, shell, BrowserWindow } from "electron"
 import { downloadManager } from "../src/modules/download"
-import { store, storeIsReady } from "../src/modules/store"
+import { storeIsReady } from "../src/modules/store"
 import { focus } from "../src/modules/window"
-import { i18n } from "../src/modules/i18next"
 
 jest.mock("electron", () => {
   return {
@@ -14,7 +13,7 @@ jest.mock("electron", () => {
       isDestroyed: jest.fn().mockReturnValue(false),
     })),
     Menu: {
-      buildFromTemplate: jest.fn().mockImplementation((tpl) => tpl),
+      buildFromTemplate: jest.fn().mockImplementation(tpl => tpl),
     },
     nativeImage: {
       createFromPath: jest.fn(),
@@ -23,12 +22,14 @@ jest.mock("electron", () => {
       openPath: jest.fn(),
     },
     BrowserWindow: {
-      getAllWindows: jest.fn().mockReturnValue([{
-        webContents: {
-          send: jest.fn(),
-        }
-      }]),
-    }
+      getAllWindows: jest.fn().mockReturnValue([
+        {
+          webContents: {
+            send: jest.fn(),
+          },
+        },
+      ]),
+    },
   }
 })
 
@@ -84,16 +85,16 @@ describe("tray", () => {
     // We cannot easily test when tray is null because it's exported and initialized
     // but if it is we can mock it
     const originalTray = tray
-    ;(tray as any) = null
+    ;(tray as unknown) = null
     await updateTrayContext()
     expect(Menu.buildFromTemplate).not.toHaveBeenCalled()
-    ;(tray as any) = originalTray
+    ;(tray as unknown) = originalTray
   })
 
   it("updateTrayContext should update the menu", async () => {
     setupTray() // initialize tray
     await updateTrayContext()
-    
+
     expect(storeIsReady).toHaveBeenCalled()
     expect(Menu.buildFromTemplate).toHaveBeenCalled()
 
@@ -115,12 +116,14 @@ describe("tray", () => {
     // Test autosync toggle
     await menuTpl[4].click()
     expect(downloadManager.setAutosync).toHaveBeenCalledWith(false)
-    expect(BrowserWindow.getAllWindows()[0].webContents.send).toHaveBeenCalledWith("autosync", false)
+    expect(
+      BrowserWindow.getAllWindows()[0].webContents.send,
+    ).toHaveBeenCalledWith("autosync", false)
   })
 
   it("updateTrayContext should render correctly when syncing is true", async () => {
     setupTray()
-    ;(downloadManager as any).syncing = true
+    ;(downloadManager as unknown).syncing = true
     await updateTrayContext()
 
     const menuTpl = (Menu.buildFromTemplate as jest.Mock).mock.calls[0][0]

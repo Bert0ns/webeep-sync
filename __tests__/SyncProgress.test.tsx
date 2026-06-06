@@ -1,3 +1,4 @@
+/* eslint-disable react/no-multi-comp */
 /**
  * @jest-environment jsdom
  */
@@ -10,15 +11,15 @@ import { LoginContext } from "../src/client/LoginContext"
 import { DownloadState, SyncResult } from "../src/util"
 
 jest.mock("electron", () => {
-  let listeners: any = {}
+  let listeners: unknown = {}
   return {
     ipcRenderer: {
       invoke: jest.fn().mockResolvedValue({}),
       on: jest.fn((channel, cb) => {
         listeners[channel] = cb
       }),
-      trigger: (channel: string, ...args: any[]) => {
-        if (listeners[channel]) listeners[channel]({} as any, ...args)
+      trigger: (channel: string, ...args: unknown[]) => {
+        if (listeners[channel]) listeners[channel]({} as unknown, ...args)
       },
       clear: () => {
         listeners = {}
@@ -29,12 +30,12 @@ jest.mock("electron", () => {
 
 jest.mock("react-i18next", () => ({
   useTranslation: () => ({
-    t: (key: string, args?: any) => `${key} ${args?.count ?? ""}`.trim(),
+    t: (key: string, args?: unknown) => `${key} ${args?.count ?? ""}`.trim(),
   }),
 }))
 
 jest.mock("../src/client/views/NewFilesModal", () => ({
-  NewFilesModal: ({ onClose }: any) => (
+  NewFilesModal: ({ onClose }: unknown) => (
     <div data-testid="new-files-modal">
       <button data-testid="modal-close" onClick={onClose}>
         Close
@@ -44,7 +45,7 @@ jest.mock("../src/client/views/NewFilesModal", () => ({
 }))
 
 jest.mock("../src/client/components/SyncProgressWrap", () => ({
-  SyncProgressWrap: ({ progress }: any) => (
+  SyncProgressWrap: ({ progress }: unknown) => (
     <div data-testid="sync-progress-wrap">{progress.downloaded}</div>
   ),
 }))
@@ -52,12 +53,12 @@ jest.mock("../src/client/components/SyncProgressWrap", () => ({
 describe("SyncProgress", () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(ipcRenderer as any).clear()
+    ;(ipcRenderer as unknown).clear()
   })
 
   const renderWithContext = (connected: boolean, isLogged: boolean) => {
     return render(
-      <LoginContext.Provider value={{ connected, isLogged } as any}>
+      <LoginContext.Provider value={{ connected, isLogged } as unknown}>
         <SyncProgress />
       </LoginContext.Provider>,
     )
@@ -106,8 +107,8 @@ describe("SyncProgress", () => {
     })
 
     act(() => {
-      ;(ipcRenderer as any).trigger("sync-result", SyncResult.success)
-      ;(ipcRenderer as any).trigger("new-files", {
+      ;(ipcRenderer as unknown).trigger("sync-result", SyncResult.success)
+      ;(ipcRenderer as unknown).trigger("new-files", {
         "Course 1": [{ filename: "file.pdf" }],
       })
     })
@@ -124,7 +125,7 @@ describe("SyncProgress", () => {
     })
 
     act(() => {
-      ;(ipcRenderer as any).trigger("sync-result", SyncResult.networkError)
+      ;(ipcRenderer as unknown).trigger("sync-result", SyncResult.networkError)
     })
 
     expect(screen.getByText("resultMessage.networkError")).toBeInTheDocument()
@@ -136,8 +137,11 @@ describe("SyncProgress", () => {
     })
 
     act(() => {
-      ;(ipcRenderer as any).trigger("download-state", DownloadState.downloading)
-      ;(ipcRenderer as any).trigger("progress", { downloaded: 1234 })
+      ;(ipcRenderer as unknown).trigger(
+        "download-state",
+        DownloadState.downloading,
+      )
+      ;(ipcRenderer as unknown).trigger("progress", { downloaded: 1234 })
     })
 
     expect(screen.getByTestId("sync-progress-wrap")).toHaveTextContent("1234")
@@ -149,7 +153,7 @@ describe("SyncProgress", () => {
     })
 
     act(() => {
-      ;(ipcRenderer as any).trigger(
+      ;(ipcRenderer as unknown).trigger(
         "download-state",
         DownloadState.fetchingFiles,
       )

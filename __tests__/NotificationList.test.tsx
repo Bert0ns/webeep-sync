@@ -8,7 +8,7 @@ import { NotificationList } from "../src/client/components/NotificationList"
 import { ipcRenderer } from "electron"
 
 jest.mock("electron", () => {
-  let listeners: any = {}
+  let listeners: unknown = {}
   return {
     ipcRenderer: {
       invoke: jest.fn().mockResolvedValue(null),
@@ -16,8 +16,8 @@ jest.mock("electron", () => {
         listeners[channel] = cb
       }),
       send: jest.fn(),
-      trigger: (channel: string, ...args: any[]) => {
-        if (listeners[channel]) listeners[channel]({} as any, ...args)
+      trigger: (channel: string, ...args: unknown[]) => {
+        if (listeners[channel]) listeners[channel]({} as unknown, ...args)
       },
       clear: () => {
         listeners = {}
@@ -44,12 +44,12 @@ global.ResizeObserver = class ResizeObserver {
 describe("NotificationList", () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(ipcRenderer as any).clear()
+    ;(ipcRenderer as unknown).clear()
     localStorage.clear()
   })
 
   it("renders correctly and opens tooltip", async () => {
-    ;(ipcRenderer.invoke as jest.Mock).mockImplementation((channel) => {
+    ;(ipcRenderer.invoke as jest.Mock).mockImplementation(channel => {
       if (channel === "get-notifications") return Promise.resolve([])
       if (channel === "notification-to-be-opened") return Promise.resolve(null)
       return Promise.resolve(null)
@@ -72,8 +72,9 @@ describe("NotificationList", () => {
   })
 
   it("handles notifications from IPC", async () => {
-    ;(ipcRenderer.invoke as jest.Mock).mockImplementation((channel) => {
-      if (channel === "get-notifications") return Promise.resolve([{ id: 1, read: false, text: "hello" }])
+    ;(ipcRenderer.invoke as jest.Mock).mockImplementation(channel => {
+      if (channel === "get-notifications")
+        return Promise.resolve([{ id: 1, read: false, text: "hello" }])
       if (channel === "notification-to-be-opened") return Promise.resolve(null)
       return Promise.resolve(null)
     })
@@ -83,7 +84,9 @@ describe("NotificationList", () => {
     })
 
     await act(async () => {
-      ;(ipcRenderer as any).trigger("notifications", [{ id: 1, read: false, text: "hello" }])
+      ;(ipcRenderer as unknown).trigger("notifications", [
+        { id: 1, read: false, text: "hello" },
+      ])
     })
 
     const icon = document.querySelector(".clickable")
@@ -97,12 +100,15 @@ describe("NotificationList", () => {
     await act(async () => {
       fireEvent.click(screen.getByText("setAllRead"))
     })
-    expect(ipcRenderer.invoke).toHaveBeenCalledWith("mark-all-notifications-read")
+    expect(ipcRenderer.invoke).toHaveBeenCalledWith(
+      "mark-all-notifications-read",
+    )
   })
 
   it("handles notification-to-be-opened", async () => {
-    ;(ipcRenderer.invoke as jest.Mock).mockImplementation((channel) => {
-      if (channel === "get-notifications") return Promise.resolve([{ id: 2, read: false, text: "test" }])
+    ;(ipcRenderer.invoke as jest.Mock).mockImplementation(channel => {
+      if (channel === "get-notifications")
+        return Promise.resolve([{ id: 2, read: false, text: "test" }])
       if (channel === "notification-to-be-opened") return Promise.resolve(2)
       return Promise.resolve(null)
     })

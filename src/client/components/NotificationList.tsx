@@ -28,7 +28,9 @@ export const NotificationList: FC = props => {
     if (saved) {
       try {
         return JSON.parse(saved)
-      } catch (e) {}
+      } catch (e) {
+        console.warn(e)
+      }
     }
     return { width: 260, height: 300 }
   })

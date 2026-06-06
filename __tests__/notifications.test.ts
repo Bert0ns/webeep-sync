@@ -6,9 +6,8 @@ import {
 import { Notification } from "electron"
 import { downloadManager } from "../src/modules/download"
 import { moodleClient } from "../src/modules/moodle"
-import { store, storeIsReady } from "../src/modules/store"
-import { send, focus } from "../src/modules/window"
-import { i18n } from "../src/modules/i18next"
+import { store } from "../src/modules/store"
+import { send } from "../src/modules/window"
 
 jest.mock("electron", () => {
   return {

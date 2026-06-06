@@ -4,6 +4,8 @@ import reactPlugin from "eslint-plugin-react"
 import importPlugin from "eslint-plugin-import"
 import prettierPlugin from "eslint-plugin-prettier/recommended"
 import globals from "globals"
+import unusedImportsPlugin from "eslint-plugin-unused-imports"
+import autofixPlugin from "eslint-plugin-autofix"
 
 export default tseslint.config(
   eslint.configs.recommended,
@@ -16,6 +18,8 @@ export default tseslint.config(
     files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
     plugins: {
       react: reactPlugin,
+      "unused-imports": unusedImportsPlugin,
+      autofix: autofixPlugin,
     },
     languageOptions: {
       parserOptions: {
@@ -55,12 +59,16 @@ export default tseslint.config(
       "no-useless-assignment": "off",
       "@typescript-eslint/no-require-imports": "off",
       "@typescript-eslint/no-unused-expressions": "off",
-      "@typescript-eslint/no-unused-vars": [
+      "@typescript-eslint/no-unused-vars": "off",
+      "unused-imports/no-unused-imports": "error",
+      "autofix/no-unused-vars": [
         "error",
         {
-          args: "none",
-          caughtErrors: "none",
+          vars: "all",
           varsIgnorePattern: "^_",
+          args: "none",
+          argsIgnorePattern: "^_",
+          caughtErrors: "none",
         },
       ],
       "@typescript-eslint/no-unsafe-declaration-merging": "off",
@@ -73,6 +81,13 @@ export default tseslint.config(
     },
   },
   {
-    ignores: ["dist/", ".webpack/", "node_modules/", "coverage/"],
+    ignores: [
+      "dist/",
+      ".webpack/",
+      "node_modules/",
+      "coverage/",
+      "out/",
+      "graphify-out/",
+    ],
   },
 )

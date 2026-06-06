@@ -1,3 +1,4 @@
+/* eslint-disable react/no-multi-comp */
 /**
  * @jest-environment jsdom
  */
@@ -8,10 +9,10 @@ import { Checkbox } from "../src/client/components/Checkbox"
 
 // Mock the icons
 jest.mock("react-icons/io5", () => ({
-  IoCheckbox: ({ onClick, className }: any) => (
+  IoCheckbox: ({ onClick, className }: unknown) => (
     <svg data-testid="positive-icon" onClick={onClick} className={className} />
   ),
-  IoSquareOutline: ({ onClick, color }: any) => (
+  IoSquareOutline: ({ onClick, color }: unknown) => (
     <svg data-testid="negative-icon" onClick={onClick} style={{ color }} />
   ),
 }))

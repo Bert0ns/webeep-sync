@@ -16,7 +16,7 @@ const { debug } = createLogger("WINDOW")
 export let mainWindow: BrowserWindow
 
 export async function createWindow(): Promise<void> {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, _reject) => {
     app.dock?.show()
     debug("Creating new main windows")
 

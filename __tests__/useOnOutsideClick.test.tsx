@@ -5,7 +5,7 @@ import { renderHook } from "@testing-library/react"
 import useOnOutsideClick from "../src/client/hooks/useOnOutsideClick"
 
 describe("useOnOutsideClick", () => {
-  let ref: any
+  let ref: unknown
   let callback: jest.Mock
   let headbar: HTMLElement
 

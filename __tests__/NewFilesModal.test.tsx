@@ -1,3 +1,4 @@
+/* eslint-disable react/no-multi-comp */
 /**
  * @jest-environment jsdom
  */
@@ -8,12 +9,12 @@ import { NewFilesModal } from "../src/client/views/NewFilesModal"
 
 jest.mock("react-i18next", () => ({
   useTranslation: () => ({
-    t: (key: string, args?: any) => `${key} ${args?.count ?? ""}`.trim(),
+    t: (key: string, args?: unknown) => `${key} ${args?.count ?? ""}`.trim(),
   }),
 }))
 
 jest.mock("../src/client/components/Modal", () => ({
-  Modal: ({ children, onClose, title }: any) => (
+  Modal: ({ children, onClose, title }: unknown) => (
     <div data-testid="modal">
       <h1 data-testid="modal-title">{title}</h1>
       <button data-testid="close-btn" onClick={onClose}>
@@ -25,9 +26,9 @@ jest.mock("../src/client/components/Modal", () => ({
 }))
 
 jest.mock("../src/client/components/NewFilesCourseCollapsable", () => ({
-  NewFilesCourseCollapsable: ({ name, files }: any) => (
+  NewFilesCourseCollapsable: ({ name, files }: unknown) => (
     <div data-testid={`course-${name}`}>
-      {files.map((f: any, idx: number) => (
+      {files.map((f: unknown, idx: number) => (
         <span key={idx}>{f.filename}</span>
       ))}
     </div>
@@ -66,7 +67,7 @@ describe("NewFilesModal", () => {
           updated: false,
         },
       ],
-    } as any
+    } as unknown
 
     render(<NewFilesModal files={mockFiles} onClose={onClose} />)
 

@@ -8,7 +8,7 @@ describe("i18next module", () => {
   it("initializes i18n successfully", async () => {
     // Spy on i18n.init and i18n.use
     const useSpy = jest.spyOn(i18n, "use").mockReturnThis()
-    const initSpy = jest.spyOn(i18n, "init").mockResolvedValue({} as any)
+    const initSpy = jest.spyOn(i18n, "init").mockResolvedValue({} as unknown)
 
     await i18nInit()
 

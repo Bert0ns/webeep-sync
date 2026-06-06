@@ -1,3 +1,4 @@
+/* eslint-disable react/no-multi-comp */
 /**
  * @jest-environment jsdom
  */
@@ -7,13 +8,13 @@ import "@testing-library/jest-dom"
 import { SyncProgressList } from "../src/client/components/SyncProgressList"
 
 jest.mock("react-icons/io5", () => ({
-  IoEllipsisHorizontal: ({ onClick, className }: any) => (
+  IoEllipsisHorizontal: ({ onClick, className }: unknown) => (
     <div data-testid="ellipsis" className={className} onClick={onClick} />
   ),
 }))
 
 jest.mock("../src/client/components/ProgressBar", () => ({
-  PrograssBar: ({ progress }: any) => (
+  PrograssBar: ({ progress }: unknown) => (
     <div data-testid="progress-bar">{progress}</div>
   ),
 }))
@@ -39,7 +40,7 @@ describe("SyncProgressList", () => {
       { filename: "file2", absolutePath: "/f2", downloaded: 5, total: 10 },
     ]
 
-    const { container } = render(<SyncProgressList files={files as any} />)
+    const { container } = render(<SyncProgressList files={files as unknown} />)
     const listWrapper = container.firstChild as HTMLElement
 
     // Initially hidden
