@@ -55,7 +55,7 @@ export function setupUpdater() {
       checkForUpdates()
     },
     60 * 60 * 1000,
-  )
+  ).unref()
 }
 
 export async function checkForUpdates() {

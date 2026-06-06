@@ -49,7 +49,7 @@ downloadManager.on("state", state => {
     sendProgressInterval = setInterval(() => {
       const progress = downloadManager.getCurrentProgress()
       if (progress) send("progress", progress)
-    }, 20)
+    }, 20).unref()
   }
   send("download-state", state)
 })

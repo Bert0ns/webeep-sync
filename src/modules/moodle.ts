@@ -98,7 +98,7 @@ export class MoodleClient extends EventEmitter {
               this.getNotifications()
             },
             1000 * 60 * 2,
-          )
+          ).unref()
         })
     })
   }
@@ -188,7 +188,7 @@ export class MoodleClient extends EventEmitter {
               resolve(await this.call(wsfunction, data, false, callUID))
               debug(`Retry successful on call [${callUID}]`)
             } catch (e) {
-              setTimeout(() => tryConnection(), 2000)
+              setTimeout(() => tryConnection(), 2000).unref()
             }
           }
           tryConnection()
