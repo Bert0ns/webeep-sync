@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState, Suspense } from "react"
-import { platform } from "os"
+
 import { createRoot } from "react-dom/client"
 import { ipcRenderer } from "electron"
 import {
@@ -21,8 +21,8 @@ import { SyncProgress } from "./views/SyncProgress"
 
 import { Course } from "../modules/moodle"
 
-const shouldDisplayHeadbar = platform() !== "linux"
-const shouldDisplayWindowsControls = platform() === "win32"
+const shouldDisplayHeadbar = true
+const shouldDisplayWindowsControls = true
 
 i18next.use(initReactI18next).init({ fallbackLng: "en" })
 
