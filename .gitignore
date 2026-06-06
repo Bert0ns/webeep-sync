@@ -89,3 +89,4 @@ typings/
 out/
 
 graphify-out/
+.graphifyignore
