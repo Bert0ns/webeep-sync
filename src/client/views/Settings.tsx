@@ -1,11 +1,12 @@
 import { platform } from "os"
 import { ipcRenderer } from "electron"
-import React, { FC, useEffect, useState } from "react"
+import React, { FC, useEffect, useState, useContext } from "react"
 import { useTranslation } from "react-i18next"
 import { IoWarning } from "react-icons/io5"
 import { Settings } from "../../modules/store"
 import { Modal } from "../components/Modal"
 import { Link } from "../components/Link"
+import { LoginContext } from "../LoginContext"
 
 import PolinetworkLogo from "../assets/polinetwork.svg"
 import { Switch } from "../components/Switch"
@@ -20,6 +21,7 @@ let prevTheme: Theme // the previous theme is stored in case the users cancel th
 let prevLanguage: "it" | "en"
 export const SettingsModal: FC<{ onClose: () => void }> = props => {
   const { t } = useTranslation("client", { keyPrefix: "settings" })
+  const { isLogged } = useContext(LoginContext)
 
   const [settings, updateSettigns] =
     useState<
@@ -212,14 +214,25 @@ export const SettingsModal: FC<{ onClose: () => void }> = props => {
             </div>
           </div>
 
-          <button
-            className="danger-button"
-            onClick={() => {
-              ipcRenderer.send("logout")
-            }}
-          >
-            {t("logout")}
-          </button>
+          {isLogged ? (
+            <button
+              className="danger-button"
+              onClick={() => {
+                ipcRenderer.send("logout")
+              }}
+            >
+              {t("logout")}
+            </button>
+          ) : (
+            <button
+              className="confirm-button"
+              onClick={() => {
+                ipcRenderer.send("request-login")
+              }}
+            >
+              {t("login", "Log In")}
+            </button>
+          )}
 
           <span className="credits">
             <span>v{version}</span>

@@ -357,11 +357,12 @@ $modal-anim-time: 0.15s;
     font-weight: bold;
     top: 50%;
     left: 50%;
-    padding: 0;
+    padding: 0 16px;
     transform: translate(-50%, -50%);
-    border-radius: 35%;
-    width: 60px;
+    border-radius: 20px;
+    min-width: 60px;
     height: 60px;
+    width: max-content;
     background-clip: padding-box;
     z-index: 0;
 
