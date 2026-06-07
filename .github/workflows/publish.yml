@@ -1,6 +1,7 @@
 name: Build Full Release
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - stable
