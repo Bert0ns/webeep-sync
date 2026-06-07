@@ -107,9 +107,9 @@ e dovrebbe tutto funzionare senza problemi
 Prerequisiti:
 
 - [git](https://git-scm.com)
-- [NodeJS](https://nodejs.org) (v18, consigliata fortemente l'installazione via
+- [NodeJS](https://nodejs.org) (v25, consigliata fortemente l'installazione via
   [nvm](https://github.com/nvm-sh/nvm))
-- [Yarn](https://yarnpkg.com/getting-started/install)
+- [pnpm](https://pnpm.io/installation)
 
 Per prima cosa scarica l'app
 
@@ -117,19 +117,19 @@ Per prima cosa scarica l'app
 # clona la repository
 git clone https://github.com/toto04/webeep-sync && cd webeep-sync
 # installa le dependencies
-yarn
+pnpm install
 ```
 
 e questo è tutto, l'app può essere avviata via linea di comando con
 
 ```sh
-yarn start
+pnpm start
 ```
 
 oppure puoi creare un package per installarla con
 
 ```sh
-yarn make
+pnpm make
 ```
 
 Per maggiori informazioni, dai un'occhiata agli script in `package.json` e alla documentazione
@@ -253,9 +253,9 @@ and everything should work without problems
 Prerequisites:
 
 - [git](https://git-scm.com)
-- [NodeJS](https://nodejs.org) (v18, I strongly recommend to install it via
+- [NodeJS](https://nodejs.org) (v25, I strongly recommend to install it via
   [nvm](https://github.com/nvm-sh/nvm))
-- [Yarn](https://yarnpkg.com/getting-started/install)
+- [pnpm](https://pnpm.io/installation)
 
 First of all, download the app
 
@@ -263,19 +263,19 @@ First of all, download the app
 # clone the repository
 git clone https://github.com/toto04/webeep-sync && cd webeep-sync
 # install dependencies
-yarn
+pnpm install
 ```
 
 and that's it, the app can be launched from command line using
 
 ```sh
-yarn start
+pnpm start
 ```
 
 or if you prefer, you can create a package for installation with
 
 ```sh
-yarn make
+pnpm make
 ```
 
 For more information, have a look at the scripts in `package.json` and the documentation of the
