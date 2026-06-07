@@ -7,22 +7,26 @@ module.exports = {
   packagerConfig: {
     icon: path.resolve(__dirname, "static/icons/icon"),
     appBundleId: "org.polinetwork.webeep-sync",
-    osxSign: {
-      identity:
-        process.env.MACOS_IDENTITY ||
-        "Developer ID Application: PoliNetwork APS (842636PS9J)",
-      "hardened-runtime": true,
-      entitlements: "entitlements.plist",
-      "entitlements-inherit": "entitlements.plist",
-      "signature-flags": "library",
-      "gatekeeper-assess": false,
-    },
-    osxNotarize: {
-      appleId: process.env.APPLEID,
-      appleIdPassword: process.env.APPLEPWD,
-      teamId: process.env.TEAMID,
-      ascProvider: process.env.TEAMID,
-    },
+    osxSign: process.env.APPLEID
+      ? {
+          identity:
+            process.env.MACOS_IDENTITY ||
+            "Developer ID Application: PoliNetwork APS (842636PS9J)",
+          "hardened-runtime": true,
+          entitlements: "entitlements.plist",
+          "entitlements-inherit": "entitlements.plist",
+          "signature-flags": "library",
+          "gatekeeper-assess": false,
+        }
+      : undefined,
+    osxNotarize: process.env.APPLEID
+      ? {
+          appleId: process.env.APPLEID,
+          appleIdPassword: process.env.APPLEPWD,
+          teamId: process.env.TEAMID,
+          ascProvider: process.env.TEAMID,
+        }
+      : undefined,
   },
   makers: [
     {
@@ -127,8 +131,12 @@ module.exports = {
       name: "@electron-forge/publisher-github",
       config: {
         repository: {
-          name: "webeep-sync",
-          owner: "toto04",
+          name: process.env.GITHUB_REPOSITORY
+            ? process.env.GITHUB_REPOSITORY.split("/")[1]
+            : "webeep-sync",
+          owner: process.env.GITHUB_REPOSITORY
+            ? process.env.GITHUB_REPOSITORY.split("/")[0]
+            : "toto04",
         },
         prerelease: !!process.env.PRERELEASE,
         draft: true,
